@@ -1,4 +1,4 @@
-﻿namespace ProductCatalog.UnitTests;
+namespace ProductCatalog.UnitTests;
 
 public class UnitTest1
 {

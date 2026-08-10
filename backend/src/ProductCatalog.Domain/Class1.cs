@@ -1,4 +1,4 @@
-﻿namespace ProductCatalog.Domain;
+namespace ProductCatalog.Domain;
 
 public class Class1
 {

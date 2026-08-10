@@ -1,4 +1,4 @@
-﻿namespace ProductCatalog.Application;
+namespace ProductCatalog.Application;
 
 public class Class1
 {

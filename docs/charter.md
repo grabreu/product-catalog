@@ -25,7 +25,7 @@ integrations, elaborate UI.
 | Architecture style | Clean Architecture (Domain, Application, Infrastructure, Api)                                                                       |
 | Runtime            | .NET 10 (LTS, supported through Nov 2028)                                                                                           |
 | Persistence        | SQL Server + EF Core                                                                                                                |
-| Local database     | SQL Server LocalDB (bundled with Visual Studio), referenced via .NET Aspire AppHost (`AddConnectionString`) - no container          |
+| Local database     | SQL Server container managed by .NET Aspire AppHost (`AddSqlServer().AddDatabase()`) - reproducible across machines and CI, no manual install |
 | Orchestration      | .NET Aspire (AppHost + ServiceDefaults) - service discovery, dashboard, OpenTelemetry out of the box                                |
 | Testing framework  | xUnit                                                                                                                               |
 | Frontend           | Not included in v1. Repository structured with a `frontend/` placeholder so a React client can be added later without restructuring |

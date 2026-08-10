@@ -1,9 +1,13 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
+﻿<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <UserSecretsId>32ade510-62b3-40cd-bc66-f40aaaa5447f</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.SqlServer" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ProductCatalog.Api\ProductCatalog.Api.csproj" />
