@@ -1,4 +1,4 @@
-namespace ProductCatalog.Infrastructure.Data;
+namespace ProductCatalog.Infrastructure.Persistence;
 
 public class ProductCatalogDbContextFactory : IDesignTimeDbContextFactory<ProductCatalogDbContext>
 {

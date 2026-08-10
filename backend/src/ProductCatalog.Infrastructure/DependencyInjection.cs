@@ -1,4 +1,4 @@
-using ProductCatalog.Infrastructure.Data;
+using ProductCatalog.Infrastructure.Persistence;
 
 namespace ProductCatalog.Infrastructure;
 

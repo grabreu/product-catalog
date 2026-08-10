@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProductCatalog.Infrastructure.Data;
+using ProductCatalog.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace ProductCatalog.Infrastructure.Data.Migrations
+namespace ProductCatalog.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ProductCatalogDbContext))]
-    [Migration("20260810182832_InitialCreate")]
+    [Migration("20260810185051_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
