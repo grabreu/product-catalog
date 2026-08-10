@@ -1,4 +1,5 @@
 using ProductCatalog.Infrastructure;
+using ProductCatalog.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    await app.InitializeDatabaseAsync();
 }
 
 app.UseHttpsRedirection();
