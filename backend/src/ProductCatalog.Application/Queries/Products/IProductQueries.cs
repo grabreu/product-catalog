@@ -7,5 +7,5 @@ public interface IProductQueries
 {
     Task<ProductDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task<PagedResult<ProductDto>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken);
+    Task<PagedResult<ProductDto>> GetPagedAsync(int page, int pageSize, bool? isActive, CancellationToken cancellationToken);
 }

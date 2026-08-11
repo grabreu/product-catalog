@@ -7,6 +7,6 @@ public sealed class GetProductsQueryHandler(IProductQueries queries) : IQueryHan
 {
     public async ValueTask<ErrorOr<PagedResult<ProductDto>>> Handle(GetProductsQuery query, CancellationToken cancellationToken)
     {
-        return await queries.GetPagedAsync(query.Page, query.PageSize, cancellationToken);
+        return await queries.GetPagedAsync(query.Page, query.PageSize, query.IsActive, cancellationToken);
     }
 }

@@ -35,9 +35,9 @@ public static class ProductEndpoints
         return app;
     }
 
-    private static async Task<IResult> GetProductsAsync(ISender sender, CancellationToken cancellationToken, int page = 1, int pageSize = 20)
+    private static async Task<IResult> GetProductsAsync(ISender sender, CancellationToken cancellationToken, int page = 1, int pageSize = 20, bool? isActive = null)
     {
-        var query = new GetProductsQuery(page, pageSize);
+        var query = new GetProductsQuery(page, pageSize, isActive);
 
         var result = await sender.Send(query, cancellationToken);
 

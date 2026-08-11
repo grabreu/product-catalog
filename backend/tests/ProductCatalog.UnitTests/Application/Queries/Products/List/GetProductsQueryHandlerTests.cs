@@ -29,10 +29,25 @@ public class GetProductsQueryHandlerTests
     {
         // Arrange
         var pagedResult = new PagedResult<ProductDto>([SampleProduct()], Page: 1, PageSize: 20, TotalCount: 1);
-        _queries.GetPagedAsync(1, 20, Arg.Any<CancellationToken>()).Returns(pagedResult);
+        _queries.GetPagedAsync(1, 20, null, Arg.Any<CancellationToken>()).Returns(pagedResult);
 
         // Act
         var result = await Handler.Handle(new GetProductsQuery(1, 20), CancellationToken.None);
+
+        // Assert
+        result.IsError.ShouldBeFalse();
+        result.Value.ShouldBe(pagedResult);
+    }
+
+    [Fact]
+    public async Task Handle_WithIsActiveFilter_PassesFilterThroughToQueries()
+    {
+        // Arrange
+        var pagedResult = new PagedResult<ProductDto>([SampleProduct()], Page: 1, PageSize: 20, TotalCount: 1);
+        _queries.GetPagedAsync(1, 20, true, Arg.Any<CancellationToken>()).Returns(pagedResult);
+
+        // Act
+        var result = await Handler.Handle(new GetProductsQuery(1, 20, true), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeFalse();

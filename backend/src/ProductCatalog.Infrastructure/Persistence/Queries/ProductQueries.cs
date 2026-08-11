@@ -25,11 +25,16 @@ public sealed class ProductQueries(ProductCatalogDbContext dbContext) : IProduct
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<PagedResult<ProductDto>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken)
+    public async Task<PagedResult<ProductDto>> GetPagedAsync(int page, int pageSize, bool? isActive, CancellationToken cancellationToken)
     {
-        var query = dbContext.Products
-            .AsNoTracking()
-            .OrderBy(p => p.CreatedAt);
+        var query = dbContext.Products.AsNoTracking();
+
+        if (isActive.HasValue)
+        {
+            query = query.Where(p => p.IsActive == isActive.Value);
+        }
+
+        query = query.OrderBy(p => p.CreatedAt);
 
         var totalCount = await query.CountAsync(cancellationToken);
 
