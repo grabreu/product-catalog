@@ -6,10 +6,16 @@ namespace ProductCatalog.UnitTests.Application.Commands.Products.Update;
 
 public class UpdateProductCommandHandlerTests
 {
-    private readonly IProductRepository _repository = Substitute.For<IProductRepository>();
-    private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
+    private readonly IProductRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly UpdateProductCommandHandler _handler;
 
-    private UpdateProductCommandHandler Handler => new(_repository, _unitOfWork);
+    public UpdateProductCommandHandlerTests()
+    {
+        _repository = Substitute.For<IProductRepository>();
+        _unitOfWork = Substitute.For<IUnitOfWork>();
+        _handler = new UpdateProductCommandHandler(_repository, _unitOfWork);
+    }
 
     private static UpdateProductCommand ValidCommand(Guid id) => new(id, "Widget Pro", "Updated description", ProductCategory.Electronics);
 
@@ -23,7 +29,7 @@ public class UpdateProductCommandHandlerTests
         var command = ValidCommand(product.Id);
 
         // Act
-        var result = await Handler.Handle(command, CancellationToken.None);
+        var result = await _handler.Handle(command, CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeFalse();
@@ -41,7 +47,7 @@ public class UpdateProductCommandHandlerTests
         _repository.GetByIdAsync(id, Arg.Any<CancellationToken>()).Returns((Product?)null);
 
         // Act
-        var result = await Handler.Handle(ValidCommand(id), CancellationToken.None);
+        var result = await _handler.Handle(ValidCommand(id), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeTrue();

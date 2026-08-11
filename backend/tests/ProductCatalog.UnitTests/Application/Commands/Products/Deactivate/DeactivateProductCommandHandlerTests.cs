@@ -6,10 +6,16 @@ namespace ProductCatalog.UnitTests.Application.Commands.Products.Deactivate;
 
 public class DeactivateProductCommandHandlerTests
 {
-    private readonly IProductRepository _repository = Substitute.For<IProductRepository>();
-    private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
+    private readonly IProductRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly DeactivateProductCommandHandler _handler;
 
-    private DeactivateProductCommandHandler Handler => new(_repository, _unitOfWork);
+    public DeactivateProductCommandHandlerTests()
+    {
+        _repository = Substitute.For<IProductRepository>();
+        _unitOfWork = Substitute.For<IUnitOfWork>();
+        _handler = new DeactivateProductCommandHandler(_repository, _unitOfWork);
+    }
 
     [Fact]
     public async Task Handle_WithExistingProduct_DeactivatesProductAndSavesChanges()
@@ -19,7 +25,7 @@ public class DeactivateProductCommandHandlerTests
         _repository.GetByIdAsync(product.Id, Arg.Any<CancellationToken>()).Returns(product);
 
         // Act
-        var result = await Handler.Handle(new DeactivateProductCommand(product.Id), CancellationToken.None);
+        var result = await _handler.Handle(new DeactivateProductCommand(product.Id), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeFalse();
@@ -35,7 +41,7 @@ public class DeactivateProductCommandHandlerTests
         _repository.GetByIdAsync(id, Arg.Any<CancellationToken>()).Returns((Product?)null);
 
         // Act
-        var result = await Handler.Handle(new DeactivateProductCommand(id), CancellationToken.None);
+        var result = await _handler.Handle(new DeactivateProductCommand(id), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeTrue();

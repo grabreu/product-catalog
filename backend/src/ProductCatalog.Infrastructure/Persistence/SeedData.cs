@@ -4,7 +4,10 @@ namespace ProductCatalog.Infrastructure.Persistence;
 
 public sealed class SeedData(ProductCatalogDbContext dbContext)
 {
-    public async Task InitializeAsync() => await dbContext.Database.MigrateAsync();
+    public async Task InitializeAsync()
+    {
+        await dbContext.Database.MigrateAsync();
+    }
 
     public async Task SeedAsync()
     {

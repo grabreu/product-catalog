@@ -7,9 +7,14 @@ namespace ProductCatalog.UnitTests.Application.Queries.Products.GetById;
 
 public class GetProductByIdQueryHandlerTests
 {
-    private readonly IProductQueries _queries = Substitute.For<IProductQueries>();
+    private readonly IProductQueries _queries;
+    private readonly GetProductByIdQueryHandler _handler;
 
-    private GetProductByIdQueryHandler Handler => new(_queries);
+    public GetProductByIdQueryHandlerTests()
+    {
+        _queries = Substitute.For<IProductQueries>();
+        _handler = new GetProductByIdQueryHandler(_queries);
+    }
 
     private static ProductDto SampleProduct(Guid id) => new(
         id,
@@ -32,7 +37,7 @@ public class GetProductByIdQueryHandlerTests
         _queries.GetByIdAsync(id, Arg.Any<CancellationToken>()).Returns(product);
 
         // Act
-        var result = await Handler.Handle(new GetProductByIdQuery(id), CancellationToken.None);
+        var result = await _handler.Handle(new GetProductByIdQuery(id), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeFalse();
@@ -47,7 +52,7 @@ public class GetProductByIdQueryHandlerTests
         _queries.GetByIdAsync(id, Arg.Any<CancellationToken>()).Returns((ProductDto?)null);
 
         // Act
-        var result = await Handler.Handle(new GetProductByIdQuery(id), CancellationToken.None);
+        var result = await _handler.Handle(new GetProductByIdQuery(id), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeTrue();

@@ -7,10 +7,16 @@ namespace ProductCatalog.UnitTests.Application.Commands.Products.AdjustStock;
 
 public class AdjustStockCommandHandlerTests
 {
-    private readonly IProductRepository _repository = Substitute.For<IProductRepository>();
-    private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
+    private readonly IProductRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly AdjustStockCommandHandler _handler;
 
-    private AdjustStockCommandHandler Handler => new(_repository, _unitOfWork);
+    public AdjustStockCommandHandlerTests()
+    {
+        _repository = Substitute.For<IProductRepository>();
+        _unitOfWork = Substitute.For<IUnitOfWork>();
+        _handler = new AdjustStockCommandHandler(_repository, _unitOfWork);
+    }
 
     [Fact]
     public async Task Handle_WithExistingProduct_AdjustsStockAndSavesChanges()
@@ -20,7 +26,7 @@ public class AdjustStockCommandHandlerTests
         _repository.GetByIdAsync(product.Id, Arg.Any<CancellationToken>()).Returns(product);
 
         // Act
-        var result = await Handler.Handle(new AdjustStockCommand(product.Id, 5), CancellationToken.None);
+        var result = await _handler.Handle(new AdjustStockCommand(product.Id, 5), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeFalse();
@@ -36,7 +42,7 @@ public class AdjustStockCommandHandlerTests
         _repository.GetByIdAsync(id, Arg.Any<CancellationToken>()).Returns((Product?)null);
 
         // Act
-        var result = await Handler.Handle(new AdjustStockCommand(id, 5), CancellationToken.None);
+        var result = await _handler.Handle(new AdjustStockCommand(id, 5), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeTrue();
@@ -52,7 +58,7 @@ public class AdjustStockCommandHandlerTests
         _repository.GetByIdAsync(product.Id, Arg.Any<CancellationToken>()).Returns(product);
 
         // Act & Assert
-        await Should.ThrowAsync<NegativeStockException>(() => Handler.Handle(new AdjustStockCommand(product.Id, -1), CancellationToken.None).AsTask());
+        await Should.ThrowAsync<NegativeStockException>(() => _handler.Handle(new AdjustStockCommand(product.Id, -1), CancellationToken.None).AsTask());
         await _unitOfWork.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 }

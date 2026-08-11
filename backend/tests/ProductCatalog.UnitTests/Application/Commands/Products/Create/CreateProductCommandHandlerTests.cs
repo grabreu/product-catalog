@@ -6,10 +6,16 @@ namespace ProductCatalog.UnitTests.Application.Commands.Products.Create;
 
 public class CreateProductCommandHandlerTests
 {
-    private readonly IProductRepository _repository = Substitute.For<IProductRepository>();
-    private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
+    private readonly IProductRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly CreateProductCommandHandler _handler;
 
-    private CreateProductCommandHandler Handler => new(_repository, _unitOfWork);
+    public CreateProductCommandHandlerTests()
+    {
+        _repository = Substitute.For<IProductRepository>();
+        _unitOfWork = Substitute.For<IUnitOfWork>();
+        _handler = new CreateProductCommandHandler(_repository, _unitOfWork);
+    }
 
     private static CreateProductCommand ValidCommand => new("Widget", "SKU-001", 10m, ProductCategory.Other);
 
@@ -20,7 +26,7 @@ public class CreateProductCommandHandlerTests
         _repository.SkuExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
 
         // Act
-        var result = await Handler.Handle(ValidCommand, CancellationToken.None);
+        var result = await _handler.Handle(ValidCommand, CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeFalse();
@@ -39,7 +45,7 @@ public class CreateProductCommandHandlerTests
             .Returns(Task.CompletedTask);
 
         // Act
-        var result = await Handler.Handle(ValidCommand, CancellationToken.None);
+        var result = await _handler.Handle(ValidCommand, CancellationToken.None);
 
         // Assert
         addedProduct.ShouldNotBeNull();
@@ -61,7 +67,7 @@ public class CreateProductCommandHandlerTests
         _repository.SkuExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(true);
 
         // Act
-        var result = await Handler.Handle(ValidCommand, CancellationToken.None);
+        var result = await _handler.Handle(ValidCommand, CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeTrue();

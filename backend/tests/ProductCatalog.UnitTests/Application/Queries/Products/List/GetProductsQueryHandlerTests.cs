@@ -8,9 +8,14 @@ namespace ProductCatalog.UnitTests.Application.Queries.Products.List;
 
 public class GetProductsQueryHandlerTests
 {
-    private readonly IProductQueries _queries = Substitute.For<IProductQueries>();
+    private readonly IProductQueries _queries;
+    private readonly GetProductsQueryHandler _handler;
 
-    private GetProductsQueryHandler Handler => new(_queries);
+    public GetProductsQueryHandlerTests()
+    {
+        _queries = Substitute.For<IProductQueries>();
+        _handler = new GetProductsQueryHandler(_queries);
+    }
 
     private static ProductDto SampleProduct() => new(
         Guid.CreateVersion7(),
@@ -32,7 +37,7 @@ public class GetProductsQueryHandlerTests
         _queries.GetPagedAsync(1, 20, null, Arg.Any<CancellationToken>()).Returns(pagedResult);
 
         // Act
-        var result = await Handler.Handle(new GetProductsQuery(1, 20), CancellationToken.None);
+        var result = await _handler.Handle(new GetProductsQuery(1, 20), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeFalse();
@@ -47,7 +52,7 @@ public class GetProductsQueryHandlerTests
         _queries.GetPagedAsync(1, 20, true, Arg.Any<CancellationToken>()).Returns(pagedResult);
 
         // Act
-        var result = await Handler.Handle(new GetProductsQuery(1, 20, true), CancellationToken.None);
+        var result = await _handler.Handle(new GetProductsQuery(1, 20, true), CancellationToken.None);
 
         // Assert
         result.IsError.ShouldBeFalse();
