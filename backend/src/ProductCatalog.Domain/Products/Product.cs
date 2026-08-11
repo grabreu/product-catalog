@@ -1,8 +1,10 @@
-using ProductCatalog.Domain.Common;
+using ProductCatalog.Domain.Products.Events;
+using ProductCatalog.Domain.Products.Exceptions;
+using ProductCatalog.Domain.SeedWork;
 
 namespace ProductCatalog.Domain.Products;
 
-public sealed class Product
+public sealed class Product : IHasDomainEvents
 {
     private readonly List<IDomainEvent> _domainEvents = [];
 
@@ -19,7 +21,7 @@ public sealed class Product
 
     public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-#pragma warning disable CS8618 // required by EF Core to materialize entities
+#pragma warning disable CS8618
     private Product()
     {
     }

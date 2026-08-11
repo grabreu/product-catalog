@@ -2,34 +2,51 @@
 
 ## Layers and Dependency Rule
 
-Dependencies point inward, toward the Domain layer. Infrastructure and Api
-depend on Application; Application depends on Domain; Domain depends on
-nothing.
+Dependencies point inward, toward the Domain layer. Application and
+Infrastructure depend on Domain; Api depends on Application and
+Infrastructure; Domain depends on nothing.
 
 ```mermaid
 flowchart LR
     Api --> Application
-    Infrastructure --> Application
+    Api --> Infrastructure
     Application --> Domain
+    Infrastructure --> Domain
 ```
 
-- **Domain** — `Product` aggregate, invariants, domain events. No external
-  dependencies.
-- **Application** — commands, queries, handlers, validators, and the
-  repository interfaces Infrastructure implements.
+- **Domain** — `Product` aggregate, invariants, domain events, and the
+  repository (`IProductRepository`) and unit-of-work (`IUnitOfWork`)
+  interfaces Infrastructure implements. Repository interfaces live here
+  rather than in Application - they express a domain concept (a
+  collection-like abstraction over an aggregate), only the implementation
+  is a persistence concern. One deliberate exception to "no external
+  dependencies": `IDomainEvent` inherits `Mediator.INotification` directly,
+  so domain events are publishable without a wrapper type - `Mediator`'s
+  source generator needs a closed, concrete message type per handler, so a
+  generic bridge type outside Domain doesn't work the way it would with a
+  reflection-based mediator like MediatR.
+- **Application** — commands, queries, handlers, validators. Organized by
+  kind first (`Commands/`, `Queries/`, `EventHandlers/`, `Behaviors/`), then
+  by aggregate one level in (e.g. `Commands/Products/Create/`) - kept
+  consistent with Domain and eShopOnContainers rather than the
+  feature-folder-first style common in Vertical Slice Architecture writeups
+  (e.g. Milan Jovanović's), since this project deliberately chose classic
+  layered Clean Architecture over Vertical Slice (see `charter.md`). An
+  event handler also isn't a use case in the same sense a command/query is
+  (it reacts to something that already happened, isn't driven by an
+  incoming request/response), so it doesn't belong inside a use-case tree
+  either way.
 - **Infrastructure** — EF Core `DbContext`, repository implementations, SQL
   Server access.
-- **Api** — Minimal API endpoints, request/response mapping.
-
-`AppHost` and `ServiceDefaults` sit outside this dependency chain - they are
-not architectural layers, they are the composition root and cross-cutting
-host concerns:
-
-- **AppHost** — the .NET Aspire entry point. Wires the `Api` project to the
-  LocalDB connection string and runs the Aspire dashboard. Nothing else
-  depends on it; it depends on `Api`.
-- **ServiceDefaults** — shared host configuration (OpenTelemetry, health
-  checks, resilience defaults) referenced by `Api`.
+- **Api** — Minimal API endpoints, request/response mapping. Organized by
+  kind first too, mirroring Application: `Endpoints/` (feature-scoped route
+  handlers, e.g. `Endpoints/Products/`), `ExceptionHandling/`
+  (`IExceptionHandler` implementations - its own top-level folder rather
+  than a nested one, since it's first-class ASP.NET Core pipeline
+  configuration, not a minor utility), `Errors/` (`ErrorOr` → HTTP problem
+  mapping). No generic `Common`/`Shared` folder in either Application or
+  Api - each cross-cutting concern gets a name specific enough to say what
+  it actually is.
 
 ## Key Decisions
 
@@ -39,8 +56,20 @@ host concerns:
 | Command/query dispatch | `Mediator` (source-generator library)                                               | Fully free, no commercial licensing (unlike MediatR's dual-license model); used specifically to demonstrate pipeline behaviors, not for indirection alone |
 | Validation             | FluentValidation as a Mediator pipeline behavior                                    | Keeps validation out of handlers                                                                                                                          |
 | API layer              | ASP.NET Core Minimal API                                                            | Native mechanism, no extra framework dependency. FastEndpoints is used elsewhere in the portfolio to keep stack variety                                   |
-| Error handling         | `ErrorOr`                                                                           | Avoids exceptions for expected business errors (e.g. duplicate SKU)                                                                                       |
+| Error handling         | `ErrorOr` for Application-level errors (validation, conflict); `DomainException` + a global `IExceptionHandler` for domain invariant violations | `ErrorOr` avoids exceptions for errors a handler can anticipate (e.g. duplicate SKU). Domain invariants (e.g. price <= 0) still throw - by the time a handler calls the aggregate, upstream validation should already have caught it, so hitting the throw path is a guard, not a normal branch |
 | API documentation      | Scalar                                                                              | Current standard replacement for Swagger UI in ASP.NET Core                                                                                               |
+| 201 response body      | The full created resource (e.g. `ProductResponse`), not just its id                | RFC 9110 §10.2.2: a 201 response "typically describes and links to the resource(s) created" - the `Location` header alone isn't enough for a client to render something without a follow-up GET |
+
+## Domain Event Dispatch
+
+Aggregates raise events into an in-memory list (`Product.DomainEvents`);
+nothing is published until persistence actually succeeds. A `SaveChanges`
+interceptor (`DispatchDomainEventsInterceptor`, Infrastructure) collects
+pending events from tracked entities after `SavedChangesAsync`, clears them,
+and publishes each one through Mediator - handlers (e.g.
+`ProductCreatedEventHandler`) then react to it. Dispatching after the save
+(not before) avoids publishing an event for a change that didn't actually
+commit.
 
 ## Request Flow: Create Product
 
@@ -64,8 +93,8 @@ sequenceDiagram
         Validation->>Handler: Handle(command)
         Handler->>Repo: Add(product)
         Repo->>DB: INSERT
-        Handler-->>Mediator: ErrorOr<ProductId>
+        Handler-->>Mediator: ErrorOr<CreateProductResult>
         Mediator-->>Api: Result
-        Api-->>Client: 201 Created
+        Api-->>Client: 201 Created (Location + full product body)
     end
 ```
