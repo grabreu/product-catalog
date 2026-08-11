@@ -49,4 +49,11 @@ public static class ErrorOrMinimalApiExtensions
             successValue => TypedResults.Created(location(successValue), successValue),
             errors => errors.ToProblem());
     }
+
+    public static IResult ToOk<T>(this ErrorOr<T> result)
+    {
+        return result.Match(
+            successValue => TypedResults.Ok(successValue),
+            errors => errors.ToProblem());
+    }
 }

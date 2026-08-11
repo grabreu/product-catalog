@@ -1,7 +1,9 @@
+using ProductCatalog.Application.Queries.Products;
 using ProductCatalog.Domain.Products;
 using ProductCatalog.Domain.SeedWork;
 using ProductCatalog.Infrastructure.Persistence;
 using ProductCatalog.Infrastructure.Persistence.Interceptors;
+using ProductCatalog.Infrastructure.Persistence.Queries;
 using ProductCatalog.Infrastructure.Persistence.Repositories;
 
 namespace ProductCatalog.Infrastructure;
@@ -21,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<SeedData>();
 
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductQueries, ProductQueries>();
 
         return services;
     }
