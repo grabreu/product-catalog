@@ -1,4 +1,5 @@
 using ProductCatalog.Application.Commands.Products.Create;
+using ProductCatalog.Application.Commands.Products.Update;
 using ProductCatalog.Application.Queries.Products.GetById;
 using ProductCatalog.Application.Queries.Products.List;
 
@@ -19,6 +20,9 @@ public static class ProductEndpoints
 
         group.MapPost("/", CreateProductAsync)
             .WithName("CreateProduct");
+
+        group.MapPut("/{id:guid}", UpdateProductAsync)
+            .WithName("UpdateProduct");
 
         return app;
     }
@@ -48,5 +52,14 @@ public static class ProductEndpoints
         var result = await sender.Send(command, cancellationToken);
 
         return result.ToCreated(product => $"/products/{product.Id}");
+    }
+
+    private static async Task<IResult> UpdateProductAsync(Guid id, UpdateProductRequest request, ISender sender, CancellationToken cancellationToken)
+    {
+        var command = new UpdateProductCommand(id, request.Name, request.Description, request.Category);
+
+        var result = await sender.Send(command, cancellationToken);
+
+        return result.ToOk();
     }
 }
