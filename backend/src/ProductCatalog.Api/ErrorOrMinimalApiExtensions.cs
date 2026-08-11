@@ -56,4 +56,11 @@ public static class ErrorOrMinimalApiExtensions
             successValue => TypedResults.Ok(successValue),
             errors => errors.ToProblem());
     }
+
+    public static IResult ToNoContent<T>(this ErrorOr<T> result)
+    {
+        return result.Match(
+            _ => TypedResults.NoContent(),
+            errors => errors.ToProblem());
+    }
 }

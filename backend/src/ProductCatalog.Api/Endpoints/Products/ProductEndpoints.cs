@@ -1,4 +1,5 @@
 using ProductCatalog.Application.Commands.Products.Create;
+using ProductCatalog.Application.Commands.Products.Deactivate;
 using ProductCatalog.Application.Commands.Products.Update;
 using ProductCatalog.Application.Queries.Products.GetById;
 using ProductCatalog.Application.Queries.Products.List;
@@ -23,6 +24,9 @@ public static class ProductEndpoints
 
         group.MapPut("/{id:guid}", UpdateProductAsync)
             .WithName("UpdateProduct");
+
+        group.MapDelete("/{id:guid}", DeactivateProductAsync)
+            .WithName("DeactivateProduct");
 
         return app;
     }
@@ -61,5 +65,14 @@ public static class ProductEndpoints
         var result = await sender.Send(command, cancellationToken);
 
         return result.ToOk();
+    }
+
+    private static async Task<IResult> DeactivateProductAsync(Guid id, ISender sender, CancellationToken cancellationToken)
+    {
+        var command = new DeactivateProductCommand(id);
+
+        var result = await sender.Send(command, cancellationToken);
+
+        return result.ToNoContent();
     }
 }
