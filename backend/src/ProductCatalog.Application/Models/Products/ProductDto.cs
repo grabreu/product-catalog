@@ -1,8 +1,8 @@
 using ProductCatalog.Domain.Products;
 
-namespace ProductCatalog.Api.Endpoints.Products;
+namespace ProductCatalog.Application.Models.Products;
 
-public sealed record ProductResponse(
+public sealed record ProductDto(
     Guid Id,
     string Name,
     string Sku,

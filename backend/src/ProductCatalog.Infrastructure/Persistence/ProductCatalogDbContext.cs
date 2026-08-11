@@ -3,7 +3,7 @@ using ProductCatalog.Domain.SeedWork;
 
 namespace ProductCatalog.Infrastructure.Persistence;
 
-public class ProductCatalogDbContext(DbContextOptions<ProductCatalogDbContext> options) : DbContext(options), IUnitOfWork
+public sealed class ProductCatalogDbContext(DbContextOptions<ProductCatalogDbContext> options) : DbContext(options), IUnitOfWork
 {
     public DbSet<Product> Products => Set<Product>();
 

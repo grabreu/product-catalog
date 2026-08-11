@@ -1,6 +1,6 @@
-namespace ProductCatalog.Api.Errors;
+namespace ProductCatalog.Api;
 
-public static class ErrorsExtensions
+public static class ErrorOrMinimalApiExtensions
 {
     public static IResult ToProblem(this List<Error> errors)
     {
@@ -41,5 +41,12 @@ public static class ErrorsExtensions
                 group => group.Select(error => error.Description).ToArray());
 
         return Results.ValidationProblem(errorsDictionary);
+    }
+
+    public static IResult ToCreated<T>(this ErrorOr<T> result, Func<T, string> location)
+    {
+        return result.Match(
+            successValue => TypedResults.Created(location(successValue), successValue),
+            errors => errors.ToProblem());
     }
 }

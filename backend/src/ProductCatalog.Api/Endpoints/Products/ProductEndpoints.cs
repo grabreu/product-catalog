@@ -1,4 +1,3 @@
-using ProductCatalog.Api.Errors;
 using ProductCatalog.Application.Commands.Products.Create;
 
 namespace ProductCatalog.Api.Endpoints.Products;
@@ -21,23 +20,6 @@ public static class ProductEndpoints
 
         var result = await sender.Send(command, cancellationToken);
 
-        return result.Match(
-            product => TypedResults.Created($"/products/{product.Id}", ToResponse(product)),
-            errors => errors.ToProblem());
-    }
-
-    private static ProductResponse ToResponse(CreateProductResult result)
-    {
-        return new ProductResponse(
-            result.Id,
-            result.Name,
-            result.Sku,
-            result.Description,
-            result.Price,
-            result.Category,
-            result.StockQuantity,
-            result.IsActive,
-            result.CreatedAt,
-            result.UpdatedAt);
+        return result.ToCreated(product => $"/products/{product.Id}");
     }
 }

@@ -1,11 +1,12 @@
+using ProductCatalog.Application.Models.Products;
 using ProductCatalog.Domain.Products;
 using ProductCatalog.Domain.SeedWork;
 
 namespace ProductCatalog.Application.Commands.Products.Create;
 
-public sealed class CreateProductCommandHandler(IProductRepository repository, IUnitOfWork unitOfWork) : ICommandHandler<CreateProductCommand, ErrorOr<CreateProductResult>>
+public sealed class CreateProductCommandHandler(IProductRepository repository, IUnitOfWork unitOfWork) : ICommandHandler<CreateProductCommand, ErrorOr<ProductDto>>
 {
-    public async ValueTask<ErrorOr<CreateProductResult>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+    public async ValueTask<ErrorOr<ProductDto>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
         if (await repository.SkuExistsAsync(command.Sku, cancellationToken))
         {
@@ -18,7 +19,7 @@ public sealed class CreateProductCommandHandler(IProductRepository repository, I
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new CreateProductResult(
+        return new ProductDto(
             product.Id,
             product.Name,
             product.Sku,

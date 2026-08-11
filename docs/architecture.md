@@ -26,16 +26,24 @@ flowchart LR
   generic bridge type outside Domain doesn't work the way it would with a
   reflection-based mediator like MediatR.
 - **Application** — commands, queries, handlers, validators. Organized by
-  kind first (`Commands/`, `Queries/`, `EventHandlers/`, `Behaviors/`), then
-  by aggregate one level in (e.g. `Commands/Products/Create/`) - kept
-  consistent with Domain and eShopOnContainers rather than the
-  feature-folder-first style common in Vertical Slice Architecture writeups
-  (e.g. Milan Jovanović's), since this project deliberately chose classic
-  layered Clean Architecture over Vertical Slice (see `charter.md`). An
-  event handler also isn't a use case in the same sense a command/query is
-  (it reacts to something that already happened, isn't driven by an
-  incoming request/response), so it doesn't belong inside a use-case tree
-  either way.
+  kind first (`Commands/`, `Queries/`, `EventHandlers/`, `Behaviors/`,
+  `Models/`), then by aggregate one level in (e.g.
+  `Commands/Products/Create/`) - kept consistent with Domain and
+  eShopOnContainers rather than the feature-folder-first style common in
+  Vertical Slice Architecture writeups (e.g. Milan Jovanović's), since this
+  project deliberately chose classic layered Clean Architecture over
+  Vertical Slice (see `charter.md`). An event handler also isn't a use case
+  in the same sense a command/query is (it reacts to something that
+  already happened, isn't driven by an incoming request/response), so it
+  doesn't belong inside a use-case tree either way. `Models/` holds read
+  DTOs shared across a use case's handlers for the same aggregate (e.g.
+  `ProductDto`, returned by `CreateProduct` today, `GetProduct` and
+  `UpdateProduct` later) - one shape per aggregate concern (e.g. a leaner
+  `ProductSummaryDto` for `ListProducts`), not one per command, to avoid a
+  parallel near-identical DTO per use case. The Api layer reuses these
+  directly as its response bodies instead of mapping them into its own
+  duplicate types - consistent with the Api layer already reusing Domain's
+  `ProductCategory` enum directly in its request/response records.
 - **Infrastructure** — EF Core `DbContext`, repository implementations, SQL
   Server access.
 - **Api** — Minimal API endpoints, request/response mapping. Organized by
@@ -58,7 +66,7 @@ flowchart LR
 | API layer              | ASP.NET Core Minimal API                                                            | Native mechanism, no extra framework dependency. FastEndpoints is used elsewhere in the portfolio to keep stack variety                                   |
 | Error handling         | `ErrorOr` for Application-level errors (validation, conflict); `DomainException` + a global `IExceptionHandler` for domain invariant violations | `ErrorOr` avoids exceptions for errors a handler can anticipate (e.g. duplicate SKU). Domain invariants (e.g. price <= 0) still throw - by the time a handler calls the aggregate, upstream validation should already have caught it, so hitting the throw path is a guard, not a normal branch |
 | API documentation      | Scalar                                                                              | Current standard replacement for Swagger UI in ASP.NET Core                                                                                               |
-| 201 response body      | The full created resource (e.g. `ProductResponse`), not just its id                | RFC 9110 §10.2.2: a 201 response "typically describes and links to the resource(s) created" - the `Location` header alone isn't enough for a client to render something without a follow-up GET |
+| 201 response body      | The full created resource (`ProductDto`), not just its id                          | RFC 9110 §10.2.2: a 201 response "typically describes and links to the resource(s) created" - the `Location` header alone isn't enough for a client to render something without a follow-up GET |
 
 ## Domain Event Dispatch
 
@@ -93,7 +101,7 @@ sequenceDiagram
         Validation->>Handler: Handle(command)
         Handler->>Repo: Add(product)
         Repo->>DB: INSERT
-        Handler-->>Mediator: ErrorOr<CreateProductResult>
+        Handler-->>Mediator: ErrorOr<ProductDto>
         Mediator-->>Api: Result
         Api-->>Client: 201 Created (Location + full product body)
     end
