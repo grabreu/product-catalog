@@ -1,6 +1,7 @@
 using ProductCatalog.Application.Commands.Products.AdjustStock;
 using ProductCatalog.Application.Commands.Products.Create;
 using ProductCatalog.Application.Commands.Products.Deactivate;
+using ProductCatalog.Application.Commands.Products.Reactivate;
 using ProductCatalog.Application.Commands.Products.Update;
 using ProductCatalog.Application.Queries.Products.GetById;
 using ProductCatalog.Application.Queries.Products.List;
@@ -14,25 +15,37 @@ public static class ProductEndpoints
         var group = app.MapGroup("/products")
             .WithTags("Products");
 
+        group.MapPost("/", CreateProductAsync)
+            .WithName("CreateProduct");
+
         group.MapGet("/", GetProductsAsync)
             .WithName("GetProducts");
 
         group.MapGet("/{id:guid}", GetProductByIdAsync)
             .WithName("GetProductById");
 
-        group.MapPost("/", CreateProductAsync)
-            .WithName("CreateProduct");
-
         group.MapPut("/{id:guid}", UpdateProductAsync)
             .WithName("UpdateProduct");
 
-        group.MapDelete("/{id:guid}", DeactivateProductAsync)
+        group.MapPost("/{id:guid}/deactivate", DeactivateProductAsync)
             .WithName("DeactivateProduct");
+
+        group.MapPost("/{id:guid}/reactivate", ReactivateProductAsync)
+            .WithName("ReactivateProduct");
 
         group.MapPatch("/{id:guid}/stock", AdjustStockAsync)
             .WithName("AdjustStock");
 
         return app;
+    }
+
+    private static async Task<IResult> CreateProductAsync(CreateProductRequest request, ISender sender, CancellationToken cancellationToken)
+    {
+        var command = new CreateProductCommand(request.Name, request.Sku, request.Price, request.Category);
+
+        var result = await sender.Send(command, cancellationToken);
+
+        return result.ToCreated(product => $"/products/{product.Id}");
     }
 
     private static async Task<IResult> GetProductsAsync(ISender sender, CancellationToken cancellationToken, int page = 1, int pageSize = 20, bool? isActive = null)
@@ -53,15 +66,6 @@ public static class ProductEndpoints
         return result.ToOk();
     }
 
-    private static async Task<IResult> CreateProductAsync(CreateProductRequest request, ISender sender, CancellationToken cancellationToken)
-    {
-        var command = new CreateProductCommand(request.Name, request.Sku, request.Price, request.Category);
-
-        var result = await sender.Send(command, cancellationToken);
-
-        return result.ToCreated(product => $"/products/{product.Id}");
-    }
-
     private static async Task<IResult> UpdateProductAsync(Guid id, UpdateProductRequest request, ISender sender, CancellationToken cancellationToken)
     {
         var command = new UpdateProductCommand(id, request.Name, request.Description, request.Category);
@@ -77,7 +81,16 @@ public static class ProductEndpoints
 
         var result = await sender.Send(command, cancellationToken);
 
-        return result.ToNoContent();
+        return result.ToOk();
+    }
+
+    private static async Task<IResult> ReactivateProductAsync(Guid id, ISender sender, CancellationToken cancellationToken)
+    {
+        var command = new ReactivateProductCommand(id);
+
+        var result = await sender.Send(command, cancellationToken);
+
+        return result.ToOk();
     }
 
     private static async Task<IResult> AdjustStockAsync(Guid id, AdjustStockRequest request, ISender sender, CancellationToken cancellationToken)

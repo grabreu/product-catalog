@@ -202,6 +202,23 @@ public class ProductTests
     }
 
     [Fact]
+    public void Reactivate_SetsIsActiveTrueAndUpdatesTimestamp()
+    {
+        // Arrange
+        var product = Product.Create(ValidName, ValidSku, ValidPrice, ValidCategory);
+        product.Deactivate();
+        var before = DateTimeOffset.UtcNow;
+
+        // Act
+        product.Reactivate();
+
+        // Assert
+        var after = DateTimeOffset.UtcNow;
+        product.IsActive.ShouldBeTrue();
+        product.UpdatedAt.ShouldBeInRange(before, after);
+    }
+
+    [Fact]
     public void ClearDomainEvents_RemovesAllRaisedEvents()
     {
         // Arrange

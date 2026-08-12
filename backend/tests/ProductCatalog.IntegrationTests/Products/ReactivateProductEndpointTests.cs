@@ -4,30 +4,30 @@ using ProductCatalog.IntegrationTests.Common;
 namespace ProductCatalog.IntegrationTests.Products;
 
 [Collection(IntegrationTestCollection.Name)]
-public sealed class DeactivateProductEndpointTests(ProductCatalogApiFactory factory) : IntegrationTestBase(factory)
+public sealed class ReactivateProductEndpointTests(ProductCatalogApiFactory factory) : IntegrationTestBase(factory)
 {
     [Fact]
-    public async Task Deactivate_WithExistingProduct_ReturnsDeactivatedProduct()
+    public async Task Reactivate_WithExistingProduct_ReturnsReactivatedProduct()
     {
         // Arrange
-        var product = await SeedProductAsync();
+        var product = await SeedProductAsync(p => p.Deactivate());
 
         // Act
-        var response = await Client.PostAsync($"/products/{product.Id}/deactivate", null);
+        var response = await Client.PostAsync($"/products/{product.Id}/reactivate", null);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var dto = await response.Content.ReadFromJsonAsync<ProductDto>(JsonOptions);
         dto.ShouldNotBeNull();
-        dto.IsActive.ShouldBeFalse();
+        dto.IsActive.ShouldBeTrue();
     }
 
     [Fact]
-    public async Task Deactivate_WithNonExistingProduct_ReturnsNotFound()
+    public async Task Reactivate_WithNonExistingProduct_ReturnsNotFound()
     {
         // Act
-        var response = await Client.PostAsync($"/products/{Guid.CreateVersion7()}/deactivate", null);
+        var response = await Client.PostAsync($"/products/{Guid.CreateVersion7()}/reactivate", null);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);

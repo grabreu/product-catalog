@@ -23,14 +23,14 @@ sub-entities or nested aggregates.
 
 - CreateProduct
 - UpdateProduct (name, description, category)
-- ChangePrice
 - AdjustStock
 - DeactivateProduct
+- ReactivateProduct
 - GetProduct
-- ListProducts (paginated)
+- ListProducts (paginated, filterable by `isActive`)
 
-**Open question:** is there a `ReactivateProduct` use case, or is
-deactivation a one-way action in this domain? Not decided yet.
+`Product.ChangePrice` exists on the aggregate but isn't wired to a
+command/endpoint yet - not a decided non-goal, just not built.
 
 ```mermaid
 classDiagram
@@ -46,9 +46,11 @@ classDiagram
         +DateTime CreatedAt
         +DateTime UpdatedAt
         +Create(name, sku, price, category)$ Product
+        +Update(name, description, category)
         +ChangePrice(decimal newPrice)
         +AdjustStock(int quantity)
         +Deactivate()
+        +Reactivate()
     }
 
     class ProductCategory {

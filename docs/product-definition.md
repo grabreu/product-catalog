@@ -57,8 +57,11 @@ Minimal, but present:
 - SKU must be unique
 - Price must be greater than 0
 - Stock quantity cannot be negative
-- Delete is a soft delete (marks inactive), not physical removal - a small
-  but real architectural decision worth documenting
+- Deactivation is a soft delete (marks inactive), not physical removal, and
+  is reversible (`ReactivateProduct`). Exposed as `POST .../deactivate` and
+  `POST .../reactivate`, not the `DELETE` verb - `DELETE` implies permanent
+  removal, which this domain doesn't have. See `architecture.md` for the
+  reasoning
 
 ## 7. Future Evolution
 

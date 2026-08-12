@@ -96,6 +96,12 @@ public sealed class Product : IHasDomainEvents
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
+    public void Reactivate()
+    {
+        IsActive = true;
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
+
     public void ClearDomainEvents()
     {
         _domainEvents.Clear();

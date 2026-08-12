@@ -27,7 +27,8 @@ integrations, elaborate UI.
 | Persistence        | SQL Server + EF Core                                                                                                                |
 | Local database     | SQL Server LocalDB (bundled with Visual Studio), connection string in `appsettings.Development.json` - no container, no manual install |
 | Orchestration      | None for now - plain `WebApplication`. .NET Aspire was tried and removed (author found it added more moving parts than value at this stage); revisit alongside observability/logging in V3 |
-| Testing framework  | xUnit                                                                                                                               |
+| Testing framework  | xUnit. Unit tests mock dependencies (NSubstitute); integration tests run through the real HTTP pipeline (`WebApplicationFactory`) against a disposable SQL Server (Testcontainers), reset between tests (Respawn) |
+| CI/CD              | GitHub Actions - format check (`dotnet format`), unit tests, integration tests as parallel jobs, plus a SonarCloud static analysis + quality gate job |
 | Frontend           | Not included in v1. Repository structured with a `frontend/` placeholder so a React client can be added later without restructuring |
 
 **Clean Architecture over Vertical Slice:** chosen because this project
@@ -41,6 +42,10 @@ Workflow project).
 
 ```text
 product-catalog/
+├── .github/
+│   ├── workflows/
+│   │   └── ci.yml
+│   └── dependabot.yml
 ├── backend/
 │   ├── src/
 │   │   ├── ProductCatalog.Domain/
@@ -52,7 +57,7 @@ product-catalog/
 │       └── ProductCatalog.IntegrationTests/
 ├── frontend/
 ├── docs/
-│   └── adr/
+│   └── adr/            # planned for V4, empty for now
 └── README.md
 ```
 

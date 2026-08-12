@@ -2,11 +2,11 @@ using ProductCatalog.Application.Models.Products;
 using ProductCatalog.Domain.Products;
 using ProductCatalog.Domain.SeedWork;
 
-namespace ProductCatalog.Application.Commands.Products.Deactivate;
+namespace ProductCatalog.Application.Commands.Products.Reactivate;
 
-public sealed class DeactivateProductCommandHandler(IProductRepository repository, IUnitOfWork unitOfWork) : ICommandHandler<DeactivateProductCommand, ErrorOr<ProductDto>>
+public sealed class ReactivateProductCommandHandler(IProductRepository repository, IUnitOfWork unitOfWork) : ICommandHandler<ReactivateProductCommand, ErrorOr<ProductDto>>
 {
-    public async ValueTask<ErrorOr<ProductDto>> Handle(DeactivateProductCommand command, CancellationToken cancellationToken)
+    public async ValueTask<ErrorOr<ProductDto>> Handle(ReactivateProductCommand command, CancellationToken cancellationToken)
     {
         var product = await repository.GetByIdAsync(command.Id, cancellationToken);
 
@@ -15,7 +15,7 @@ public sealed class DeactivateProductCommandHandler(IProductRepository repositor
             return Error.NotFound(description: $"No product was found with ID '{command.Id}'.");
         }
 
-        product.Deactivate();
+        product.Reactivate();
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

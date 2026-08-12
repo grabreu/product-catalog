@@ -1,14 +1,21 @@
 # Product Catalog
 
+[![CI](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml/badge.svg)](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=grabreu_product-catalog&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=grabreu_product-catalog)
+
 Reference implementation used as an architectural baseline for the rest of
 the portfolio - Clean Architecture, CQRS-lite, and testing practices,
 without domain complexity or authentication obscuring the fundamentals.
 
 ## Status
 
-Implementation in progress. Backend solution scaffolded (Domain,
-Application, Infrastructure, Api, AppHost, ServiceDefaults, tests) - no
-endpoints or domain logic yet.
+V1 (clean architecture baseline) and V2 (integration tests + CI pipeline)
+complete. Full CRUD for `Product`: create, read (by id and paginated list,
+filterable by `isActive`), update, adjust stock, deactivate/reactivate
+(soft delete, reversible). Covered by unit tests (Domain/Application) and
+integration tests running through the real HTTP pipeline against a
+disposable SQL Server. CI runs format, unit, and integration checks plus a
+SonarCloud quality gate on every push/PR.
 
 ## Documentation
 
@@ -23,6 +30,7 @@ endpoints or domain logic yet.
 
 ## Stack
 
-.NET 10 (LTS), ASP.NET Core Minimal API, .NET Aspire (orchestration/
-observability), EF Core, SQL Server LocalDB (local dev, no container),
-xUnit. Frontend (React) not included in v1.
+.NET 10 (LTS), ASP.NET Core Minimal API, EF Core, SQL Server LocalDB (local
+dev, no container). Tests: xUnit, NSubstitute (unit), Testcontainers +
+Respawn (integration, real SQL Server in Docker). CI: GitHub Actions +
+SonarCloud. Frontend (React) not included in v1.

@@ -36,14 +36,16 @@ flowchart LR
   in the same sense a command/query is (it reacts to something that
   already happened, isn't driven by an incoming request/response), so it
   doesn't belong inside a use-case tree either way. `Models/` holds read
-  DTOs shared across a use case's handlers for the same aggregate (e.g.
-  `ProductDto`, returned by `CreateProduct` today, `GetProduct` and
-  `UpdateProduct` later) - one shape per aggregate concern (e.g. a leaner
-  `ProductSummaryDto` for `ListProducts`), not one per command, to avoid a
-  parallel near-identical DTO per use case. The Api layer reuses these
-  directly as its response bodies instead of mapping them into its own
-  duplicate types - consistent with the Api layer already reusing Domain's
-  `ProductCategory` enum directly in its request/response records.
+  DTOs shared across a use case's handlers for the same aggregate - every
+  command/query that returns a product (`CreateProduct`, `GetProductById`,
+  `UpdateProduct`, `DeactivateProduct`, `ReactivateProduct`, `AdjustStock`)
+  reuses the single `ProductDto`, and `GetProducts` wraps it in a generic
+  `PagedResult<T>` rather than a separate `ProductSummaryDto` - one shape
+  per aggregate concern, not one per command, to avoid a parallel
+  near-identical DTO per use case. The Api layer reuses these directly as
+  its response bodies instead of mapping them into its own duplicate types
+  - consistent with the Api layer already reusing Domain's `ProductCategory`
+  enum directly in its request/response records.
 - **Infrastructure** — EF Core `DbContext`, repository implementations, SQL
   Server access.
 - **Api** — Minimal API endpoints, request/response mapping. Organized by
@@ -51,10 +53,11 @@ flowchart LR
   handlers, e.g. `Endpoints/Products/`), `ExceptionHandling/`
   (`IExceptionHandler` implementations - its own top-level folder rather
   than a nested one, since it's first-class ASP.NET Core pipeline
-  configuration, not a minor utility), `Errors/` (`ErrorOr` → HTTP problem
-  mapping). No generic `Common`/`Shared` folder in either Application or
-  Api - each cross-cutting concern gets a name specific enough to say what
-  it actually is.
+  configuration, not a minor utility). `ErrorOr` → HTTP problem mapping
+  lives in a single `ErrorOrMinimalApiExtensions.cs` at the project root -
+  not enough surface area yet to earn its own folder. No generic
+  `Common`/`Shared` folder in either Application or Api - each cross-cutting
+  concern gets a name specific enough to say what it actually is.
 
 ## Key Decisions
 
@@ -67,6 +70,8 @@ flowchart LR
 | Error handling         | `ErrorOr` for Application-level errors (validation, conflict); `DomainException` + a global `IExceptionHandler` for domain invariant violations | `ErrorOr` avoids exceptions for errors a handler can anticipate (e.g. duplicate SKU). Domain invariants (e.g. price <= 0) still throw - by the time a handler calls the aggregate, upstream validation should already have caught it, so hitting the throw path is a guard, not a normal branch |
 | API documentation      | Scalar                                                                              | Current standard replacement for Swagger UI in ASP.NET Core                                                                                               |
 | 201 response body      | The full created resource (`ProductDto`), not just its id                          | RFC 9110 §10.2.2: a 201 response "typically describes and links to the resource(s) created" - the `Location` header alone isn't enough for a client to render something without a follow-up GET |
+| Lifecycle actions      | `POST /products/{id}/deactivate` and `.../reactivate`, not the `DELETE` verb        | `DELETE` implies permanent removal, which this domain doesn't have - reusing it for a reversible soft-delete would be misleading, and there's no natural verb for "undelete". `PATCH` was also considered but rejected: `PATCH` implies a body describing changes to apply (RFC 5789), and these actions take none - they're triggers, not partial updates. Mirrors Gmail's `messages.trash`/`.untrash` (both `POST`, no body), not GitHub's `PATCH /repos/{owner}/{repo}` with `{"archived": true}` (a generic resource-level `PATCH` this project already rejected in favor of one endpoint per domain operation) |
+| Partial field update   | `PATCH /products/{id}/stock` (`AdjustStock`) carries a body (`quantityDelta`)        | Distinguishes it from the lifecycle actions above: a client-supplied value being applied is exactly what `PATCH` is for |
 
 ## Domain Event Dispatch
 
