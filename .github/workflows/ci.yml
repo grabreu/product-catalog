@@ -116,6 +116,7 @@ jobs:
   sonarcloud:
     name: SonarCloud
     needs: [unit-tests, integration-tests]
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
 
     permissions:
