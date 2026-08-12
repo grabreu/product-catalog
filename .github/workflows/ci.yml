@@ -134,13 +134,13 @@ jobs:
           fetch-depth: 0
 
       - name: Download unit test coverage
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: coverage-unit
           path: backend/coverage/unit
 
       - name: Download integration test coverage
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: coverage-integration
           path: backend/coverage/integration
