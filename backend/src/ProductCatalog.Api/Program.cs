@@ -46,4 +46,4 @@ if (app.Environment.IsDevelopment())
     await app.Services.InitializeDatabaseAsync();
 }
 
-app.Run();
+await app.RunAsync();

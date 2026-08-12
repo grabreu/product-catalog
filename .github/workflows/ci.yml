@@ -189,7 +189,8 @@ jobs:
             /o:"grabreu" \
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.qualitygate.wait=true \
-            /d:sonar.cs.cobertura.reportsPaths="coverage/**/*.xml"
+            /d:sonar.cs.cobertura.reportsPaths="coverage/**/*.xml" \
+            /d:sonar.exclusions="**/Migrations/**"
           dotnet build -c Release
           "${{ runner.temp }}/scanner/dotnet-sonarscanner" end \
             /d:sonar.token="$SONAR_TOKEN"
