@@ -1,4 +1,5 @@
 using ProductCatalog.Application.Commands.Products.AdjustStock;
+using ProductCatalog.Application.Commands.Products.ChangePrice;
 using ProductCatalog.Application.Commands.Products.Create;
 using ProductCatalog.Application.Commands.Products.Deactivate;
 using ProductCatalog.Application.Commands.Products.Reactivate;
@@ -35,6 +36,9 @@ public static class ProductEndpoints
 
         group.MapPatch("/{id:guid}/stock", AdjustStockAsync)
             .WithName("AdjustStock");
+
+        group.MapPatch("/{id:guid}/price", ChangePriceAsync)
+            .WithName("ChangePrice");
 
         return app;
     }
@@ -96,6 +100,15 @@ public static class ProductEndpoints
     private static async Task<IResult> AdjustStockAsync(Guid id, AdjustStockRequest request, ISender sender, CancellationToken cancellationToken)
     {
         var command = new AdjustStockCommand(id, request.QuantityDelta);
+
+        var result = await sender.Send(command, cancellationToken);
+
+        return result.ToOk();
+    }
+
+    private static async Task<IResult> ChangePriceAsync(Guid id, ChangePriceRequest request, ISender sender, CancellationToken cancellationToken)
+    {
+        var command = new ChangePriceCommand(id, request.NewPrice);
 
         var result = await sender.Send(command, cancellationToken);
 

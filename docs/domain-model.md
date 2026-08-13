@@ -23,14 +23,12 @@ sub-entities or nested aggregates.
 
 - CreateProduct
 - UpdateProduct (name, description, category)
+- ChangePrice
 - AdjustStock
 - DeactivateProduct
 - ReactivateProduct
 - GetProduct
 - ListProducts (paginated, filterable by `isActive`)
-
-`Product.ChangePrice` exists on the aggregate but isn't wired to a
-command/endpoint yet - not a decided non-goal, just not built.
 
 ```mermaid
 classDiagram

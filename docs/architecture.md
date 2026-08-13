@@ -38,8 +38,8 @@ flowchart LR
   doesn't belong inside a use-case tree either way. `Models/` holds read
   DTOs shared across a use case's handlers for the same aggregate - every
   command/query that returns a product (`CreateProduct`, `GetProductById`,
-  `UpdateProduct`, `DeactivateProduct`, `ReactivateProduct`, `AdjustStock`)
-  reuses the single `ProductDto`, and `GetProducts` wraps it in a generic
+  `UpdateProduct`, `ChangePrice`, `DeactivateProduct`, `ReactivateProduct`,
+  `AdjustStock`) reuses the single `ProductDto`, and `GetProducts` wraps it in a generic
   `PagedResult<T>` rather than a separate `ProductSummaryDto` - one shape
   per aggregate concern, not one per command, to avoid a parallel
   near-identical DTO per use case. The Api layer reuses these directly as
@@ -71,7 +71,7 @@ flowchart LR
 | API documentation      | Scalar                                                                              | Current standard replacement for Swagger UI in ASP.NET Core                                                                                               |
 | 201 response body      | The full created resource (`ProductDto`), not just its id                          | RFC 9110 §10.2.2: a 201 response "typically describes and links to the resource(s) created" - the `Location` header alone isn't enough for a client to render something without a follow-up GET |
 | Lifecycle actions      | `POST /products/{id}/deactivate` and `.../reactivate`, not the `DELETE` verb        | `DELETE` implies permanent removal, which this domain doesn't have - reusing it for a reversible soft-delete would be misleading, and there's no natural verb for "undelete". `PATCH` was also considered but rejected: `PATCH` implies a body describing changes to apply (RFC 5789), and these actions take none - they're triggers, not partial updates. Mirrors Gmail's `messages.trash`/`.untrash` (both `POST`, no body), not GitHub's `PATCH /repos/{owner}/{repo}` with `{"archived": true}` (a generic resource-level `PATCH` this project already rejected in favor of one endpoint per domain operation) |
-| Partial field update   | `PATCH /products/{id}/stock` (`AdjustStock`) carries a body (`quantityDelta`)        | Distinguishes it from the lifecycle actions above: a client-supplied value being applied is exactly what `PATCH` is for |
+| Partial field update   | `PATCH /products/{id}/stock` (`AdjustStock`) and `PATCH /products/{id}/price` (`ChangePrice`) carry a body (`quantityDelta`, `newPrice`) | Distinguishes them from the lifecycle actions above: a client-supplied value being applied is exactly what `PATCH` is for |
 
 ## Domain Event Dispatch
 
