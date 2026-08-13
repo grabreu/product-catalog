@@ -25,8 +25,9 @@ integrations, elaborate UI.
 | Architecture style | Clean Architecture (Domain, Application, Infrastructure, Api)                                                                       |
 | Runtime            | .NET 10 (LTS, supported through Nov 2028)                                                                                           |
 | Persistence        | SQL Server + EF Core                                                                                                                |
-| Local database     | SQL Server LocalDB (bundled with Visual Studio), connection string in `appsettings.Development.json` - no container, no manual install |
-| Orchestration      | None for now - plain `WebApplication`. .NET Aspire was tried and removed (author found it added more moving parts than value at this stage); revisit alongside observability/logging in V3 |
+| Local database     | Real SQL Server in a container, orchestrated by the Aspire AppHost (`WithDataVolume`, persists between runs) - same engine as integration tests (Testcontainers) and prod (Azure SQL) |
+| Orchestration      | .NET Aspire (`AppHost` + `ServiceDefaults`), scoped to local dev only - cloud provisioning is Terraform's job. Tried and removed early on for adding overhead with no logic yet to observe; reintroduced once there was a real CRUD + test suite to justify it |
+| Observability      | OpenTelemetry (traces/metrics) + Serilog with the `Serilog.Sinks.OpenTelemetry` sink, landing logs on the same OTLP pipeline. Health checks at `/health`, `/alive` |
 | Testing framework  | xUnit. Unit tests mock dependencies (NSubstitute); integration tests run through the real HTTP pipeline (`WebApplicationFactory`) against a disposable SQL Server (Testcontainers), reset between tests (Respawn) |
 | CI/CD              | GitHub Actions - format check (`dotnet format`), unit tests, integration tests as parallel jobs, plus a SonarCloud static analysis + quality gate job |
 | Frontend           | Not included in v1. Repository structured with a `frontend/` placeholder so a React client can be added later without restructuring |
@@ -51,7 +52,9 @@ product-catalog/
 │   │   ├── ProductCatalog.Domain/
 │   │   ├── ProductCatalog.Application/
 │   │   ├── ProductCatalog.Infrastructure/
-│   │   └── ProductCatalog.Api/
+│   │   ├── ProductCatalog.Api/
+│   │   ├── ProductCatalog.AppHost/          # local dev orchestration only
+│   │   └── ProductCatalog.ServiceDefaults/  # shared OTel/Serilog/health-check wiring
 │   └── tests/
 │       ├── ProductCatalog.UnitTests/
 │       └── ProductCatalog.IntegrationTests/

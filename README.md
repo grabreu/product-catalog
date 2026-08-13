@@ -10,12 +10,12 @@ without domain complexity or authentication obscuring the fundamentals.
 ## Status
 
 V1 (clean architecture baseline) and V2 (integration tests + CI pipeline)
-complete. Full CRUD for `Product`: create, read (by id and paginated list,
-filterable by `isActive`), update, adjust stock, deactivate/reactivate
-(soft delete, reversible). Covered by unit tests (Domain/Application) and
-integration tests running through the real HTTP pipeline against a
-disposable SQL Server. CI runs format, unit, and integration checks plus a
-SonarCloud quality gate on every push/PR.
+complete; V3 (observability) underway. Full CRUD for `Product`: create,
+read (by id and paginated list, filterable by `isActive`), update, adjust
+stock, deactivate/reactivate (soft delete, reversible). Covered by unit
+tests (Domain/Application) and integration tests running through the real
+HTTP pipeline against a disposable SQL Server. CI runs format, unit, and
+integration checks plus a SonarCloud quality gate on every push/PR.
 
 ## Documentation
 
@@ -30,7 +30,9 @@ SonarCloud quality gate on every push/PR.
 
 ## Stack
 
-.NET 10 (LTS), ASP.NET Core Minimal API, EF Core, SQL Server LocalDB (local
-dev, no container). Tests: xUnit, NSubstitute (unit), Testcontainers +
-Respawn (integration, real SQL Server in Docker). CI: GitHub Actions +
-SonarCloud. Frontend (React) not included in v1.
+.NET 10 (LTS), ASP.NET Core Minimal API, EF Core, SQL Server (real
+container locally, orchestrated by an Aspire AppHost). Observability:
+OpenTelemetry + Serilog, viewable in the Aspire Dashboard locally. Tests:
+xUnit, NSubstitute (unit), Testcontainers + Respawn (integration, real SQL
+Server in Docker). CI: GitHub Actions + SonarCloud. Frontend (React) not
+included in v1.

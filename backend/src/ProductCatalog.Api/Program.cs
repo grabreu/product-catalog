@@ -3,15 +3,11 @@ using ProductCatalog.Api.ExceptionHandling;
 using ProductCatalog.Application;
 using ProductCatalog.Infrastructure;
 using ProductCatalog.Infrastructure.Persistence;
+using ProductCatalog.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, services, configuration) =>
-{
-    configuration.ReadFrom.Configuration(context.Configuration)
-        .ReadFrom.Services(services)
-        .Enrich.FromLogContext();
-});
+builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
 
@@ -29,7 +25,8 @@ builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
-app.UseSerilogRequestLogging();
+app.MapDefaultEndpoints();
+
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 

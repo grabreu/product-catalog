@@ -9,9 +9,9 @@ public sealed class Product : IHasDomainEvents
     private readonly List<IDomainEvent> _domainEvents = [];
 
     public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Sku { get; private set; }
-    public string Description { get; private set; }
+    public string Name { get; private set; } = null!;
+    public string Sku { get; private set; } = null!;
+    public string Description { get; private set; } = null!;
     public decimal Price { get; private set; }
     public ProductCategory Category { get; private set; }
     public int StockQuantity { get; private set; }
@@ -21,11 +21,9 @@ public sealed class Product : IHasDomainEvents
 
     public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-#pragma warning disable CS8618
     private Product()
     {
     }
-#pragma warning restore CS8618
 
     private Product(Guid id, string name, string sku, decimal price, ProductCategory category)
     {
