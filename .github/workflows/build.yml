@@ -14,15 +14,15 @@ concurrency:
 jobs:
   format:
     name: Format
-    uses: ./.github/workflows/components/format.yml
+    uses: ./.github/workflows/_format.yml
 
   tests:
     name: Tests
-    uses: ./.github/workflows/components/tests.yml
+    uses: ./.github/workflows/_tests.yml
 
   sonarcloud:
     name: SonarCloud
     needs: [format, tests]
-    uses: ./.github/workflows/components/sonar.yml
+    uses: ./.github/workflows/_sonar.yml
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
