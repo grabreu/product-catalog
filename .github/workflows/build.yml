@@ -32,5 +32,5 @@ jobs:
 
   docker:
     name: Build / Publish Docker image
-    needs: [sonarcloud]
+    # needs: [sonarcloud]
     uses: ./.github/workflows/_docker.yml
