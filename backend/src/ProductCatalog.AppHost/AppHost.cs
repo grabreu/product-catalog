@@ -10,4 +10,4 @@ builder.AddProject<Projects.ProductCatalog_Api>("api")
     .WithReference(db)
     .WaitFor(db);
 
-builder.Build().Run();
+await builder.Build().RunAsync();
