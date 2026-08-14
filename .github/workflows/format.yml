@@ -1,0 +1,32 @@
+name: Reusable / Format
+
+on:
+  workflow_call:
+
+jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+          cache: true
+          cache-dependency-path: |
+            backend/**/*.csproj
+            backend/Directory.Packages.props
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Verify formatting
+        run: dotnet format --no-restore --verify-no-changes --severity info
