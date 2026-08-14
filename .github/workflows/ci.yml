@@ -113,6 +113,21 @@ jobs:
           name: coverage-integration
           path: backend/coverage
 
+  docker-build:
+    name: Docker build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Build image
+        run: docker build -f src/ProductCatalog.Api/Dockerfile -t product-catalog-api:ci .
+
   sonarcloud:
     name: SonarCloud
     needs: [unit-tests, integration-tests]
