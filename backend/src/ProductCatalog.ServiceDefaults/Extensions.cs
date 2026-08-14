@@ -59,7 +59,7 @@ public static class Extensions
         return builder;
     }
 
-    private static WebApplicationBuilder AddOpenTelemetryExporters(this WebApplicationBuilder builder)
+    private static void AddOpenTelemetryExporters(this WebApplicationBuilder builder)
     {
         var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
 
@@ -67,9 +67,6 @@ public static class Extensions
         {
             builder.Services.AddOpenTelemetry().UseOtlpExporter();
         }
-
-
-        return builder;
     }
 
     public static WebApplicationBuilder AddSerilog(this WebApplicationBuilder builder)
