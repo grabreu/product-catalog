@@ -31,6 +31,6 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   docker:
-    name: Build / Publish Docker image
+    name: Docker
     needs: [sonarcloud]
     uses: ./.github/workflows/_docker.yml
