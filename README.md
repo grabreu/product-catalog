@@ -1,6 +1,6 @@
 # Product Catalog
 
-[![CI](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml/badge.svg)](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml)
+[![CI](https://github.com/grabreu/product-catalog/actions/workflows/build.yml/badge.svg)](https://github.com/grabreu/product-catalog/actions/workflows/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=grabreu_product-catalog&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=grabreu_product-catalog)
 
 Reference implementation used as an architectural baseline for the rest of
