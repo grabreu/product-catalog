@@ -1,4 +1,4 @@
-# ADR-0008: Observability - OpenTelemetry, Serilog, health checks
+# ADR-0007: Observability - OpenTelemetry, Serilog, health checks
 
 ## Status
 

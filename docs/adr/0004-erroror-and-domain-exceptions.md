@@ -1,4 +1,4 @@
-# ADR-0005: ErrorOr for anticipated failures, exceptions for invariant violations
+# ADR-0004: ErrorOr for anticipated failures, exceptions for invariant violations
 
 ## Status
 

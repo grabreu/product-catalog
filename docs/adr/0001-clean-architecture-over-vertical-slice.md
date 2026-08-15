@@ -6,10 +6,11 @@ Accepted
 
 ## Context
 
-This project is the architectural baseline the rest of the portfolio is
-compared against. Vertical Slice organizes code by use case rather than by
-layer, and fits better when a project has many loosely related use cases
-(e.g. a Change/Approval Workflow project elsewhere in the portfolio).
+This system has a small number of tightly related use cases (single-entity
+CRUD: create, read, update, deactivate/reactivate). Vertical Slice
+organizes code by use case rather than by layer, and fits better when a
+system has many loosely related use cases that don't share much
+structure.
 
 ## Decision
 
@@ -18,7 +19,7 @@ Layered Clean Architecture: `Domain`, `Application`, `Infrastructure`,
 
 ## Consequences
 
-- More widely recognizable pattern for a baseline other projects reference.
+- Widely recognizable pattern, easy to onboard onto without prior context.
 - Adds indirection (interfaces, mapping between layers) that wouldn't pay
-  off in a project with few, tightly related use cases - Vertical Slice
-  stays the better fit there.
+  off in a system with few, tightly related use cases - Vertical Slice
+  would be the better fit there.

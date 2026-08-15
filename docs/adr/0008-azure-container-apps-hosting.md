@@ -1,4 +1,4 @@
-# ADR-0009: Cloud hosting - Azure Container Apps, manual provisioning, OIDC deploy
+# ADR-0008: Cloud hosting - Azure Container Apps, manual provisioning, OIDC deploy
 
 ## Status
 

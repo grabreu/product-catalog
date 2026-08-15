@@ -4,9 +4,9 @@
 [![CD](https://github.com/grabreu/product-catalog/actions/workflows/cd.yml/badge.svg)](https://github.com/grabreu/product-catalog/actions/workflows/cd.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=grabreu_product-catalog&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=grabreu_product-catalog)
 
-Reference implementation used as an architectural baseline for the rest of
-the portfolio - Clean Architecture, CQRS-lite, and testing practices,
-without domain complexity or authentication obscuring the fundamentals.
+A deliberately minimal reference API - full CRUD for a single entity,
+demonstrating Clean Architecture, CQRS-lite, and testing practices without
+domain complexity or authentication obscuring the fundamentals.
 
 ## Status
 
@@ -24,7 +24,7 @@ quality gate on every push/PR; CD publishes and deploys on every push to
 ## Documentation
 
 - [`docs/product-definition.md`](docs/product-definition.md) - problem,
-  motivation, scope, and competencies this project demonstrates
+  scope, and competencies this project demonstrates
 - [`docs/charter.md`](docs/charter.md) - scope, stack facts, and repository
   structure
 - [`docs/domain-model.md`](docs/domain-model.md) - domain model and class

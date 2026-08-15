@@ -1,4 +1,4 @@
-# ADR-0007: Aspire for local dev orchestration only
+# ADR-0006: Aspire for local dev orchestration only
 
 ## Status
 
@@ -25,4 +25,4 @@ flow and test suite to justify it.
 - Local dev config (Aspire wiring) and cloud config (plain env vars on the
   Container App) diverge somewhat, since Aspire isn't driving cloud
   provisioning - `azd`'s Bicep auto-generation was considered and rejected
-  as more ceremony than a single-environment app needs (see ADR-0009).
+  as more ceremony than a single-environment app needs (see ADR-0008).

@@ -64,3 +64,34 @@ sequenceDiagram
         Api-->>Client: 201 Created (Location + full product body)
     end
 ```
+
+## Testing Strategy
+
+Unit tests (`ProductCatalog.UnitTests`) cover Domain and Application in
+isolation - dependencies mocked with NSubstitute. Integration tests
+(`ProductCatalog.IntegrationTests`) run through the real HTTP pipeline
+(`WebApplicationFactory`) against a disposable SQL Server (Testcontainers),
+reset between tests with Respawn instead of recreating the container each
+time.
+
+## CI/CD Pipeline
+
+```mermaid
+flowchart LR
+    subgraph PR["ci.yml — pull request"]
+        A1[Format] --> A3[SonarCloud]
+        A2[Tests] --> A3
+    end
+    subgraph Main["cd.yml — push to main"]
+        B1[Format] --> B3[SonarCloud]
+        B2[Tests] --> B3
+        B3 --> B4[Publish → GHCR]
+        B4 --> B5[Deploy → Azure Container Apps]
+    end
+```
+
+`ci.yml` and `cd.yml` run the same format/test/SonarCloud checks;
+`cd.yml` adds publish and deploy, since only `main` is meant to ship. Both
+skip entirely on changes limited to docs/README/LICENSE. `cd.yml` deploys
+by resolving the image's immutable digest and updating the Container App
+to it (ADR-0008) - no separate release/tagging step.

@@ -1,4 +1,4 @@
-# ADR-0006: REST verb choices for lifecycle actions and partial updates
+# ADR-0005: REST verb choices for lifecycle actions and partial updates
 
 ## Status
 

@@ -2,9 +2,8 @@
 
 ## Overview
 
-Reference implementation used as an architectural baseline for the rest of
-the portfolio. Intentionally minimal business domain: value comes from
-demonstrating clean structure, testing discipline, and CI/CD practice
+A deliberately minimal reference API: full CRUD for a single entity, built
+to demonstrate clean structure, testing discipline, and CI/CD practice
 without domain complexity or authentication obscuring the fundamentals.
 
 ## Scope
@@ -25,8 +24,7 @@ list with pagination. Full MVP scope and non-goals: see
 | CI/CD          | GitHub Actions - format, unit/integration tests, SonarCloud, then publish (GHCR) and deploy (Azure Container Apps) on push to `main` |
 | Cloud hosting  | Azure Container Apps + Azure SQL (serverless, free tier)                                          |
 
-Decisions with a real alternative and a reason one was picked - and why -
-live in [`docs/adr/`](adr/); this table is facts, not reasoning.
+See [`docs/adr/`](adr/) for the reasoning behind these choices.
 
 ## Repository Structure
 
@@ -58,11 +56,3 @@ product-catalog/
 │   └── product-definition.md
 └── README.md
 ```
-
-## Roadmap
-
-See `product-definition.md`. Frontend architecture is intentionally
-undecided here - it gets its own short charter + architecture pass
-when that version starts, not guessed at now. See the portfolio-roadmap
-repo's `project-definition-guide.md` ("Evolution Between Versions") for
-the general rule.
