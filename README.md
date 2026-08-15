@@ -33,7 +33,11 @@ integration checks plus a SonarCloud quality gate on every push/PR.
 
 .NET 10 (LTS), ASP.NET Core Minimal API, EF Core, SQL Server (real
 container locally, orchestrated by an Aspire AppHost). Observability:
-OpenTelemetry + Serilog, viewable in the Aspire Dashboard locally. Tests:
-xUnit, NSubstitute (unit), Testcontainers + Respawn (integration, real SQL
-Server in Docker). CI: GitHub Actions + SonarCloud. Frontend (React) not
-included in v1.
+OpenTelemetry + Serilog, health checks at `/health` (real SQL check) and
+`/alive`, viewable in the Aspire Dashboard both locally and in the deployed
+environment. Tests: xUnit, NSubstitute (unit), Testcontainers + Respawn
+(integration, real SQL Server in Docker). CI/CD: GitHub Actions + SonarCloud,
+publishing to GHCR and deploying to Azure Container Apps (OIDC, no stored
+credentials) on every push to `main`. Hosting: Azure Container Apps +
+Azure SQL (serverless, free tier), provisioned by hand - see `charter.md`.
+Frontend (React) not included in v1.
