@@ -54,7 +54,6 @@ jobs:
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.version=${{ github.sha }}
             org.opencontainers.image.title=Product Catalog API
-            org.opencontainers.image.description=Reference implementation used as an architectural baseline for the rest of the portfolio - Clean Architecture, CQRS-lite, and testing practices.
             org.opencontainers.image.licenses=MIT
 
       - name: Resolve immutable image reference
