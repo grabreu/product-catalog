@@ -18,6 +18,9 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("ProductCatalogDb"))
                 .AddInterceptors(sp.GetRequiredService<DispatchDomainEventsInterceptor>()));
 
+        services.AddHealthChecks()
+            .AddSqlServer(configuration.GetConnectionString("ProductCatalogDb")!, name: "database");
+
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ProductCatalogDbContext>());
 
         services.AddScoped<SeedData>();
