@@ -1,6 +1,6 @@
-using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
@@ -9,6 +9,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using ProductCatalog.ServiceDefaults;
 using Serilog;
+using Serilog.Events;
 
 namespace ProductCatalog.ServiceDefaults;
 
@@ -67,13 +68,6 @@ public static class Extensions
         {
             builder.Services.AddOpenTelemetry().UseOtlpExporter();
         }
-
-        var useAzureMonitor = !string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
-
-        if (useAzureMonitor)
-        {
-            builder.Services.AddOpenTelemetry().UseAzureMonitor();
-        }
     }
 
     public static WebApplicationBuilder AddSerilog(this WebApplicationBuilder builder)
@@ -106,7 +100,10 @@ public static class Extensions
 
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
-        app.UseSerilogRequestLogging();
+        app.UseSerilogRequestLogging(options =>
+        {
+            options.GetLevel = GetRequestLoggingLevel;
+        });
 
         app.MapHealthChecks(HealthEndpointPath);
 
@@ -116,5 +113,15 @@ public static class Extensions
         });
 
         return app;
+    }
+
+    private static LogEventLevel GetRequestLoggingLevel(HttpContext context, double elapsed, Exception? ex)
+    {
+        if (context.Request.Path.StartsWithSegments(HealthEndpointPath) || context.Request.Path.StartsWithSegments(AlivenessEndpointPath))
+        {
+            return LogEventLevel.Verbose;
+        }
+
+        return ex is not null ? LogEventLevel.Error : LogEventLevel.Information;
     }
 }
