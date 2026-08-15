@@ -37,17 +37,11 @@ app.MapDefaultEndpoints();
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.MapProductEndpoints();
 
-if (app.Environment.IsDevelopment())
-{
-    await app.Services.InitializeDatabaseAsync();
-}
+await app.Services.InitializeDatabaseAsync();
 
 await app.RunAsync();
