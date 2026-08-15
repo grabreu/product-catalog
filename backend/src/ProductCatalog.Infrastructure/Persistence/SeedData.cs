@@ -39,13 +39,17 @@ public sealed class SeedData(ProductCatalogDbContext dbContext)
 
 public static class InitializerExtensions
 {
-    public static async Task InitializeDatabaseAsync(this IServiceProvider services)
+    public static async Task MigrateDatabaseAsync(this IServiceProvider services)
     {
         using var scope = services.CreateScope();
 
-        var initializer = scope.ServiceProvider.GetRequiredService<SeedData>();
+        await scope.ServiceProvider.GetRequiredService<SeedData>().InitializeAsync();
+    }
 
-        await initializer.InitializeAsync();
-        await initializer.SeedAsync();
+    public static async Task SeedDatabaseAsync(this IServiceProvider services)
+    {
+        using var scope = services.CreateScope();
+
+        await scope.ServiceProvider.GetRequiredService<SeedData>().SeedAsync();
     }
 }
