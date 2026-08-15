@@ -3,10 +3,9 @@
 ## 1. The Problem
 
 There is no real business problem being solved here. This is a meta-need:
-a clean, boring reference project to validate architecture, testing, and CI
-patterns before applying them to the domain-rich projects in the portfolio.
-The person who feels this need is the author, as a developer organizing
-their own portfolio - not an external user.
+a clean, boring reference project to validate architecture, testing, and
+CI/CD patterns before applying them elsewhere. The person who feels this
+need is the author, as a developer - not an external user.
 
 ## 2. Domain Familiarity
 
@@ -15,20 +14,14 @@ in tutorials, sample projects, and boilerplates. It does not come from
 personal or professional experience, and that's fine here: this project's
 value doesn't depend on domain depth.
 
-## 3. Personal Motivation
-
-Not used as a final product. Used as a living template - something to
-revisit when starting a new project to recall "how did I structure
-validation/testing last time."
-
-## 4. Existing Products
+## 3. Existing Products
 
 Many CRUD boilerplates already exist (Microsoft's eShopOnWeb, various
-TodoMVC-style samples, etc.). The difference here is that this one is
-calibrated to the author's own stack and conventions (folder structure,
-testing approach, documentation style), not a generic third-party tutorial.
+TodoMVC-style samples, etc.). The difference here is a specific, consistent
+set of conventions - folder structure, testing approach, documentation
+style - applied deliberately, rather than a generic third-party tutorial.
 
-## 5. Scope — MVP
+## 4. Scope — MVP
 
 Full CRUD for Product:
 
@@ -50,60 +43,36 @@ external integrations, no elaborate UI.
 This is intentional: zero auth complexity so nothing distracts from clean
 fundamentals.
 
-## 6. Business Rules
+## 5. Business Rules
 
 Minimal, but present:
 
 - SKU must be unique
 - Price must be greater than 0
 - Stock quantity cannot be negative
-- Deactivation is a soft delete (marks inactive), not physical removal, and
-  is reversible (`ReactivateProduct`). Exposed as `POST .../deactivate` and
-  `POST .../reactivate`, not the `DELETE` verb - `DELETE` implies permanent
-  removal, which this domain doesn't have. See `architecture.md` for the
+- Deactivation is a soft delete (marks inactive) and is reversible
+  (`ReactivateProduct`), exposed as `POST .../deactivate` and
+  `POST .../reactivate`. See `architecture.md` and ADR-0005 for the
   reasoning
 
-## 7. Future Evolution
+## 6. Future Evolution
 
-Unlike the other portfolio projects, future versions here introduce
-_engineering practice_, not _domain features_:
+Each future version introduces one specific engineering practice:
 
 - **V1** — Clean architecture baseline + unit tests
 - **V2** — Integration tests + CI pipeline
 - **V3** — Observability/logging
 - **V4** — Documentation discipline / Architecture Decision Records (ADRs)
-- **V5** — Frontend (React) - architecture decided when this version
-  starts, not guessed at now
+- **V5** — Frontend (React), architecture deferred to when that version
+  starts
 
-Each version is an exercise in engineering maturity, not business
-complexity.
-
-## 8. Engineering Competencies
+## 7. Engineering Competencies
 
 - Clean architecture skeleton
 - Testing practices (unit -> integration over versions)
 - Documentation conventions
 - CI/CD setup
 
-If this project were removed from the portfolio, there would be no clean
-baseline to compare the other, more complex projects against.
-
----
-
-## Portfolio Fit Checklist
-
-- [x] Do I understand this domain? (Trivially, by design)
-- [x] Is the problem realistic? (Meta-problem: needing a clean baseline)
-- [x] Would I use this system? (As a living reference template)
-- [x] Can I explain the business without mentioning technology? (N/A by
-      design - this project exists to validate technology/practice, not to
-      model a business)
-- [x] Is the scope intentionally small? (Yes - smallest project in the
-      portfolio)
-- [x] Does this project demonstrate competencies that another project does
-      not? (Yes - clean baseline architecture/testing/CI discipline)
-- [x] If removed, would a specific competency disappear? (Yes - the
-      reference point for engineering practice maturity)
-
-All criteria met - see `charter.md`, `domain-model.md`, and `architecture.md`
-for the resulting technical decisions.
+If this project were removed, there would be no clean baseline to compare
+more complex systems against. See `charter.md`, `domain-model.md`, and
+`architecture.md` for the resulting technical decisions.
