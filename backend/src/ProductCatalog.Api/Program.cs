@@ -43,10 +43,6 @@ app.MapScalarApiReference();
 app.MapProductEndpoints();
 
 await app.Services.MigrateDatabaseAsync();
-
-if (app.Configuration.GetValue<bool>("Database:SeedOnStartup"))
-{
-    await app.Services.SeedDatabaseAsync();
-}
+await app.Services.SeedDatabaseAsync();
 
 await app.RunAsync();
