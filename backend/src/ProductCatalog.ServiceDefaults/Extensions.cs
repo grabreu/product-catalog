@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
@@ -101,13 +102,7 @@ public static class Extensions
     {
         app.UseSerilogRequestLogging(options =>
         {
-            options.GetLevel = (context, elapsed, ex) =>
-                context.Request.Path.StartsWithSegments(HealthEndpointPath)
-                || context.Request.Path.StartsWithSegments(AlivenessEndpointPath)
-                    ? LogEventLevel.Verbose
-                    : ex is not null
-                        ? LogEventLevel.Error
-                        : LogEventLevel.Information;
+            options.GetLevel = GetRequestLoggingLevel;
         });
 
         app.MapHealthChecks(HealthEndpointPath);
@@ -118,5 +113,15 @@ public static class Extensions
         });
 
         return app;
+    }
+
+    private static LogEventLevel GetRequestLoggingLevel(HttpContext context, double elapsed, Exception? ex)
+    {
+        if (context.Request.Path.StartsWithSegments(HealthEndpointPath) || context.Request.Path.StartsWithSegments(AlivenessEndpointPath))
+        {
+            return LogEventLevel.Verbose;
+        }
+
+        return ex is not null ? LogEventLevel.Error : LogEventLevel.Information;
     }
 }
