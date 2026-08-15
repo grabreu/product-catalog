@@ -9,6 +9,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using ProductCatalog.ServiceDefaults;
 using Serilog;
+using Serilog.Events;
 
 namespace ProductCatalog.ServiceDefaults;
 
@@ -106,7 +107,16 @@ public static class Extensions
 
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
-        app.UseSerilogRequestLogging();
+        app.UseSerilogRequestLogging(options =>
+        {
+            options.GetLevel = (context, elapsed, ex) =>
+                context.Request.Path.StartsWithSegments(HealthEndpointPath)
+                || context.Request.Path.StartsWithSegments(AlivenessEndpointPath)
+                    ? LogEventLevel.Verbose
+                    : ex is not null
+                        ? LogEventLevel.Error
+                        : LogEventLevel.Information;
+        });
 
         app.MapHealthChecks(HealthEndpointPath);
 
