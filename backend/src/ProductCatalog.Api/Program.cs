@@ -42,7 +42,6 @@ app.MapScalarApiReference();
 
 app.MapProductEndpoints();
 
-await app.Services.MigrateDatabaseAsync();
-await app.Services.SeedDatabaseAsync();
+await app.Services.InitializeDatabaseAsync();
 
 await app.RunAsync();
