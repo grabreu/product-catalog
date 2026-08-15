@@ -2,9 +2,9 @@
 
 ## Overview
 
-A deliberately minimal reference API: full CRUD for a single entity, built
-to demonstrate clean structure, testing discipline, and CI/CD practice
-without domain complexity or authentication obscuring the fundamentals.
+A single-entity CRUD API, built to demonstrate clean structure, testing
+discipline, and CI/CD practice. See `product-definition.md` for why the
+domain and auth are intentionally trivial.
 
 ## Scope
 

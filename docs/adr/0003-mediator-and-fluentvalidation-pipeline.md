@@ -14,7 +14,7 @@ default, moved to a dual commercial license.
 
 `Mediator` (source-generator based, fully free) dispatches commands and
 queries. FluentValidation runs as a Mediator pipeline behavior ahead of
-handlers, not inside them.
+handlers.
 
 ## Consequences
 

@@ -22,10 +22,10 @@ since Container Apps polls them every few seconds.
 
 ## Consequences
 
-- One logging pipeline, not two.
-- Container Apps can actually act on health (restart a dead replica, stop
-  routing to one that can't reach the database), not just check the
-  process is listening.
+- A single logging pipeline to maintain.
+- Container Apps can act on health beyond checking the process is
+  listening - restart a dead replica, stop routing to one that can't
+  reach the database.
 - Application Insights was evaluated and dropped - its surface area
   (Smart Detection, Workbooks, Cohorts, ...) is disproportionate for a
   single-developer project at this scale. Revisit if this needs longer

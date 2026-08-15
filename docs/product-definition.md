@@ -50,25 +50,21 @@ Minimal, but present:
 - SKU must be unique
 - Price must be greater than 0
 - Stock quantity cannot be negative
-- Deactivation is a soft delete (marks inactive), not physical removal, and
-  is reversible (`ReactivateProduct`). Exposed as `POST .../deactivate` and
-  `POST .../reactivate`, not the `DELETE` verb - `DELETE` implies permanent
-  removal, which this domain doesn't have. See `architecture.md` and
-  ADR-0005 for the reasoning
+- Deactivation is a soft delete (marks inactive) and is reversible
+  (`ReactivateProduct`), exposed as `POST .../deactivate` and
+  `POST .../reactivate`. See `architecture.md` and ADR-0005 for the
+  reasoning
 
 ## 6. Future Evolution
 
-Future versions introduce engineering practice, not domain features:
+Each future version introduces one specific engineering practice:
 
 - **V1** — Clean architecture baseline + unit tests
 - **V2** — Integration tests + CI pipeline
 - **V3** — Observability/logging
 - **V4** — Documentation discipline / Architecture Decision Records (ADRs)
-- **V5** — Frontend (React) - architecture decided when this version
-  starts, not guessed at now
-
-Each version is an exercise in engineering maturity, not business
-complexity.
+- **V5** — Frontend (React), architecture deferred to when that version
+  starts
 
 ## 7. Engineering Competencies
 

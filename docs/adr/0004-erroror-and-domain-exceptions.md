@@ -19,6 +19,6 @@ violations.
 
 ## Consequences
 
-- Two error-handling paths to maintain, not one.
+- Two error-handling paths to maintain.
 - A thrown `DomainException` at runtime signals a bug in upstream
-  validation, not a normal branch - it's a guard, not expected traffic.
+  validation - it's a guard against a state that should be unreachable.
