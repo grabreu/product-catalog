@@ -37,15 +37,12 @@ app.MapDefaultEndpoints();
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.MapProductEndpoints();
 
-if (app.Environment.IsDevelopment())
+if (app.Configuration.GetValue<bool>("Database:SeedOnStartup"))
 {
     await app.Services.InitializeDatabaseAsync();
 }
