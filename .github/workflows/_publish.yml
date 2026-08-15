@@ -1,4 +1,4 @@
-name: Reusable / Docker
+name: Reusable / Publish
 
 on:
   workflow_call:
