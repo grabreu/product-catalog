@@ -47,12 +47,14 @@ product-catalog/
 │   └── tests/
 │       ├── ProductCatalog.UnitTests/
 │       └── ProductCatalog.IntegrationTests/
-├── frontend/
+├── frontend/                       # see frontend-charter.md - F1 not started yet
 ├── docs/
 │   ├── adr/                # architecture decision records
 │   ├── architecture.md
 │   ├── charter.md
 │   ├── domain-model.md
+│   ├── frontend-architecture.md
+│   ├── frontend-charter.md
 │   └── product-definition.md
 └── README.md
 ```
