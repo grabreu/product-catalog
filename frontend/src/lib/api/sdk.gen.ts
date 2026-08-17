@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AdjustStockData, AdjustStockResponses, ChangePriceData, ChangePriceResponses, CreateProductData, CreateProductResponses, DeactivateProductData, DeactivateProductResponses, GetProductByIdData, GetProductByIdResponses, GetProductsData, GetProductsResponses, ReactivateProductData, ReactivateProductResponses, UpdateProductData, UpdateProductResponses } from './types.gen';
+import type { AdjustStockData, AdjustStockErrors, AdjustStockResponses, ChangePriceData, ChangePriceErrors, ChangePriceResponses, CreateProductData, CreateProductErrors, CreateProductResponses, DeactivateProductData, DeactivateProductErrors, DeactivateProductResponses, GetProductByIdData, GetProductByIdErrors, GetProductByIdResponses, GetProductsData, GetProductsErrors, GetProductsResponses, ReactivateProductData, ReactivateProductErrors, ReactivateProductResponses, UpdateProductData, UpdateProductErrors, UpdateProductResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -18,9 +18,9 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
 };
 
-export const getProducts = <ThrowOnError extends boolean = false>(options?: Options<GetProductsData, ThrowOnError>): RequestResult<GetProductsResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetProductsResponses, unknown, ThrowOnError>({ url: '/products', ...options });
+export const getProducts = <ThrowOnError extends boolean = false>(options?: Options<GetProductsData, ThrowOnError>): RequestResult<GetProductsResponses, GetProductsErrors, ThrowOnError> => (options?.client ?? client).get<GetProductsResponses, GetProductsErrors, ThrowOnError>({ url: '/products', ...options });
 
-export const createProduct = <ThrowOnError extends boolean = false>(options: Options<CreateProductData, ThrowOnError>): RequestResult<CreateProductResponses, unknown, ThrowOnError> => (options.client ?? client).post<CreateProductResponses, unknown, ThrowOnError>({
+export const createProduct = <ThrowOnError extends boolean = false>(options: Options<CreateProductData, ThrowOnError>): RequestResult<CreateProductResponses, CreateProductErrors, ThrowOnError> => (options.client ?? client).post<CreateProductResponses, CreateProductErrors, ThrowOnError>({
     url: '/products',
     ...options,
     headers: {
@@ -29,9 +29,9 @@ export const createProduct = <ThrowOnError extends boolean = false>(options: Opt
     }
 });
 
-export const getProductById = <ThrowOnError extends boolean = false>(options: Options<GetProductByIdData, ThrowOnError>): RequestResult<GetProductByIdResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetProductByIdResponses, unknown, ThrowOnError>({ url: '/products/{id}', ...options });
+export const getProductById = <ThrowOnError extends boolean = false>(options: Options<GetProductByIdData, ThrowOnError>): RequestResult<GetProductByIdResponses, GetProductByIdErrors, ThrowOnError> => (options.client ?? client).get<GetProductByIdResponses, GetProductByIdErrors, ThrowOnError>({ url: '/products/{id}', ...options });
 
-export const updateProduct = <ThrowOnError extends boolean = false>(options: Options<UpdateProductData, ThrowOnError>): RequestResult<UpdateProductResponses, unknown, ThrowOnError> => (options.client ?? client).put<UpdateProductResponses, unknown, ThrowOnError>({
+export const updateProduct = <ThrowOnError extends boolean = false>(options: Options<UpdateProductData, ThrowOnError>): RequestResult<UpdateProductResponses, UpdateProductErrors, ThrowOnError> => (options.client ?? client).put<UpdateProductResponses, UpdateProductErrors, ThrowOnError>({
     url: '/products/{id}',
     ...options,
     headers: {
@@ -40,11 +40,11 @@ export const updateProduct = <ThrowOnError extends boolean = false>(options: Opt
     }
 });
 
-export const deactivateProduct = <ThrowOnError extends boolean = false>(options: Options<DeactivateProductData, ThrowOnError>): RequestResult<DeactivateProductResponses, unknown, ThrowOnError> => (options.client ?? client).post<DeactivateProductResponses, unknown, ThrowOnError>({ url: '/products/{id}/deactivate', ...options });
+export const deactivateProduct = <ThrowOnError extends boolean = false>(options: Options<DeactivateProductData, ThrowOnError>): RequestResult<DeactivateProductResponses, DeactivateProductErrors, ThrowOnError> => (options.client ?? client).post<DeactivateProductResponses, DeactivateProductErrors, ThrowOnError>({ url: '/products/{id}/deactivate', ...options });
 
-export const reactivateProduct = <ThrowOnError extends boolean = false>(options: Options<ReactivateProductData, ThrowOnError>): RequestResult<ReactivateProductResponses, unknown, ThrowOnError> => (options.client ?? client).post<ReactivateProductResponses, unknown, ThrowOnError>({ url: '/products/{id}/reactivate', ...options });
+export const reactivateProduct = <ThrowOnError extends boolean = false>(options: Options<ReactivateProductData, ThrowOnError>): RequestResult<ReactivateProductResponses, ReactivateProductErrors, ThrowOnError> => (options.client ?? client).post<ReactivateProductResponses, ReactivateProductErrors, ThrowOnError>({ url: '/products/{id}/reactivate', ...options });
 
-export const adjustStock = <ThrowOnError extends boolean = false>(options: Options<AdjustStockData, ThrowOnError>): RequestResult<AdjustStockResponses, unknown, ThrowOnError> => (options.client ?? client).patch<AdjustStockResponses, unknown, ThrowOnError>({
+export const adjustStock = <ThrowOnError extends boolean = false>(options: Options<AdjustStockData, ThrowOnError>): RequestResult<AdjustStockResponses, AdjustStockErrors, ThrowOnError> => (options.client ?? client).patch<AdjustStockResponses, AdjustStockErrors, ThrowOnError>({
     url: '/products/{id}/stock',
     ...options,
     headers: {
@@ -53,7 +53,7 @@ export const adjustStock = <ThrowOnError extends boolean = false>(options: Optio
     }
 });
 
-export const changePrice = <ThrowOnError extends boolean = false>(options: Options<ChangePriceData, ThrowOnError>): RequestResult<ChangePriceResponses, unknown, ThrowOnError> => (options.client ?? client).patch<ChangePriceResponses, unknown, ThrowOnError>({
+export const changePrice = <ThrowOnError extends boolean = false>(options: Options<ChangePriceData, ThrowOnError>): RequestResult<ChangePriceResponses, ChangePriceErrors, ThrowOnError> => (options.client ?? client).patch<ChangePriceResponses, ChangePriceErrors, ThrowOnError>({
     url: '/products/{id}/price',
     ...options,
     headers: {

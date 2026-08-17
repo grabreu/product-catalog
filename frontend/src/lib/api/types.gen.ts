@@ -19,7 +19,47 @@ export type CreateProductRequest = {
     category: ProductCategory;
 };
 
+export type HttpValidationProblemDetails = {
+    type?: null | string;
+    title?: null | string;
+    status?: null | number | string;
+    detail?: null | string;
+    instance?: null | string;
+    errors?: {
+        [key: string]: Array<string>;
+    };
+};
+
+export type PagedResultOfProductDto = {
+    items: Array<ProductDto>;
+    page: number | string;
+    pageSize: number | string;
+    totalCount: number | string;
+    totalPages?: number | string;
+};
+
+export type ProblemDetails = {
+    type?: null | string;
+    title?: null | string;
+    status?: null | number | string;
+    detail?: null | string;
+    instance?: null | string;
+};
+
 export type ProductCategory = 'Electronics' | 'Apparel' | 'Home' | 'Other';
+
+export type ProductDto = {
+    id: string;
+    name: string;
+    sku: string;
+    description: string;
+    price: number | string;
+    category: ProductCategory;
+    stockQuantity: number | string;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+};
 
 export type UpdateProductRequest = {
     name: string;
@@ -38,12 +78,23 @@ export type GetProductsData = {
     url: '/products';
 };
 
+export type GetProductsErrors = {
+    /**
+     * Bad Request
+     */
+    400: HttpValidationProblemDetails;
+};
+
+export type GetProductsError = GetProductsErrors[keyof GetProductsErrors];
+
 export type GetProductsResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: PagedResultOfProductDto;
 };
+
+export type GetProductsResponse = GetProductsResponses[keyof GetProductsResponses];
 
 export type CreateProductData = {
     body: CreateProductRequest;
@@ -52,12 +103,27 @@ export type CreateProductData = {
     url: '/products';
 };
 
+export type CreateProductErrors = {
+    /**
+     * Bad Request
+     */
+    400: HttpValidationProblemDetails;
+    /**
+     * Conflict
+     */
+    409: ProblemDetails;
+};
+
+export type CreateProductError = CreateProductErrors[keyof CreateProductErrors];
+
 export type CreateProductResponses = {
     /**
-     * OK
+     * Created
      */
-    200: unknown;
+    201: ProductDto;
 };
+
+export type CreateProductResponse = CreateProductResponses[keyof CreateProductResponses];
 
 export type GetProductByIdData = {
     body?: never;
@@ -68,12 +134,23 @@ export type GetProductByIdData = {
     url: '/products/{id}';
 };
 
+export type GetProductByIdErrors = {
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type GetProductByIdError = GetProductByIdErrors[keyof GetProductByIdErrors];
+
 export type GetProductByIdResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: ProductDto;
 };
+
+export type GetProductByIdResponse = GetProductByIdResponses[keyof GetProductByIdResponses];
 
 export type UpdateProductData = {
     body: UpdateProductRequest;
@@ -84,12 +161,27 @@ export type UpdateProductData = {
     url: '/products/{id}';
 };
 
+export type UpdateProductErrors = {
+    /**
+     * Bad Request
+     */
+    400: HttpValidationProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type UpdateProductError = UpdateProductErrors[keyof UpdateProductErrors];
+
 export type UpdateProductResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: ProductDto;
 };
+
+export type UpdateProductResponse = UpdateProductResponses[keyof UpdateProductResponses];
 
 export type DeactivateProductData = {
     body?: never;
@@ -100,12 +192,23 @@ export type DeactivateProductData = {
     url: '/products/{id}/deactivate';
 };
 
+export type DeactivateProductErrors = {
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type DeactivateProductError = DeactivateProductErrors[keyof DeactivateProductErrors];
+
 export type DeactivateProductResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: ProductDto;
 };
+
+export type DeactivateProductResponse = DeactivateProductResponses[keyof DeactivateProductResponses];
 
 export type ReactivateProductData = {
     body?: never;
@@ -116,12 +219,23 @@ export type ReactivateProductData = {
     url: '/products/{id}/reactivate';
 };
 
+export type ReactivateProductErrors = {
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type ReactivateProductError = ReactivateProductErrors[keyof ReactivateProductErrors];
+
 export type ReactivateProductResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: ProductDto;
 };
+
+export type ReactivateProductResponse = ReactivateProductResponses[keyof ReactivateProductResponses];
 
 export type AdjustStockData = {
     body: AdjustStockRequest;
@@ -132,12 +246,23 @@ export type AdjustStockData = {
     url: '/products/{id}/stock';
 };
 
+export type AdjustStockErrors = {
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type AdjustStockError = AdjustStockErrors[keyof AdjustStockErrors];
+
 export type AdjustStockResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: ProductDto;
 };
+
+export type AdjustStockResponse = AdjustStockResponses[keyof AdjustStockResponses];
 
 export type ChangePriceData = {
     body: ChangePriceRequest;
@@ -148,9 +273,24 @@ export type ChangePriceData = {
     url: '/products/{id}/price';
 };
 
+export type ChangePriceErrors = {
+    /**
+     * Bad Request
+     */
+    400: HttpValidationProblemDetails;
+    /**
+     * Not Found
+     */
+    404: ProblemDetails;
+};
+
+export type ChangePriceError = ChangePriceErrors[keyof ChangePriceErrors];
+
 export type ChangePriceResponses = {
     /**
      * OK
      */
-    200: unknown;
+    200: ProductDto;
 };
+
+export type ChangePriceResponse = ChangePriceResponses[keyof ChangePriceResponses];
