@@ -18,11 +18,12 @@ flowchart LR
 - **`components/ui/`** — shadcn/ui primitives, shared across features.
 
 Why these choices over the alternatives considered: see
-[`docs/adr/`](adr/).
+[`docs/adr/`](../adr/).
 
 ## Backend Contract
 
 The frontend has no database and no business rules of its own - every
-mutation and read goes through the Product Catalog API. `domain-model.md`
-and the API's own OpenAPI document (`/openapi/v1.json`) are the source of
-truth for what's available.
+mutation and read goes through the Product Catalog API.
+[`domain-model.md`](../backend/domain-model.md) and the API's own
+OpenAPI document (`/openapi/v1.json`) are the source of truth for what's
+available.

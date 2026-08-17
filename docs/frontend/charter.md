@@ -4,13 +4,13 @@
 
 A single-page React client for the Product Catalog API - full CRUD for
 `Product` (list, create, edit, deactivate/reactivate), no auth. See
-`product-definition.md` for why.
+[`product-definition.md`](../product-definition.md) for why.
 
 ## Scope
 
-Same entity, same operations as the API - see `product-definition.md`.
-No new business rules; the frontend is a client, not a second source of
-truth.
+Same entity, same operations as the API - see
+[`product-definition.md`](../product-definition.md). No new business
+rules; the frontend is a client, not a second source of truth.
 
 ## Facts
 
@@ -29,7 +29,7 @@ truth.
 | Hosting           | Azure Static Web Apps                                              |
 | CI/CD             | GitHub Actions, scoped to `frontend/**` via path filters           |
 
-See [`docs/adr/`](adr/) for the reasoning behind these choices.
+See [`docs/adr/`](../adr/) for the reasoning behind these choices.
 
 ## Repository Structure
 
@@ -44,18 +44,24 @@ frontend/
 └── ...
 ```
 
-## Roadmap
+## Build Milestones
 
-Mirrors the backend's per-version engineering-practice approach (see
-`product-definition.md`), applied fresh to this component - numbered
-`F1`-`F4` to avoid colliding with the backend's own `V1`-`V5`:
+The backend's roadmap (`V1`-`V5` in `product-definition.md`) is a
+retrospective record of engineering practice reached, in order. This is
+a prospective build plan instead - a different kind of list, so it uses
+its own naming instead of continuing `V`:
 
-- **F1** — Scaffold: Vite + React + TanStack (Router/Query/Form),
-  shadcn/ui, generated API client, feature-first structure. Full CRUD
-  screens for `Product`.
-- **F2** — Component tests (Vitest + React Testing Library), Biome as a
-  CI check.
-- **F3** — Deploy: Azure Static Web Apps, CORS on the API, CD pipeline.
-- **F4** — Documentation discipline: this charter, `frontend-architecture.md`,
-  and the ADRs they reference - written before F1's code this time,
-  applying what V4 established for the backend from the start.
+- **M1 — Scaffold**: Vite + React + TypeScript, TanStack Router wired
+  with a base route, shadcn/ui installed, Biome + pnpm configured. No
+  feature yet - just the shell running.
+- **M2 — Read path**: generated API client, TanStack Query, the Product
+  list screen working end-to-end against the real API.
+- **M3 — Write path**: create/edit forms (TanStack Form + Zod),
+  deactivate/reactivate actions - full CRUD complete.
+- **M4 — Testing & CI**: Vitest + React Testing Library component tests,
+  Biome as a CI gate, pipeline scoped to `frontend/**`.
+- **M5 — Deploy**: Azure Static Web Apps, CORS on the API, CD pipeline.
+
+No documentation milestone: unlike the backend, where `V4` closed a gap
+left by `V1`-`V3`, this charter and its ADRs were written before any of
+the above - there's no later gap to close.

@@ -24,7 +24,7 @@ flowchart LR
   (`ExceptionHandling/`), `ErrorOr` → HTTP problem mapping.
 
 Why these choices over the alternatives considered: see
-[`docs/adr/`](adr/).
+[`docs/adr/`](../adr/).
 
 ## Domain Event Dispatch
 

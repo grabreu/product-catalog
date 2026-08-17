@@ -63,8 +63,8 @@ Each future version introduces one specific engineering practice:
 - **V2** — Integration tests + CI pipeline
 - **V3** — Observability/logging
 - **V4** — Documentation discipline / Architecture Decision Records (ADRs)
-- **V5** — Frontend (React). See `frontend-charter.md` for its own
-  `F1`-`F4` breakdown
+- **V5** — Frontend (React). See `frontend/charter.md` for its own build
+  milestones
 
 ## 7. Engineering Competencies
 
@@ -74,6 +74,5 @@ Each future version introduces one specific engineering practice:
 - CI/CD setup
 
 If this project were removed, there would be no clean baseline to compare
-more complex systems against. See `charter.md`, `domain-model.md`, and
-`architecture.md` for the backend's technical decisions, and
-`frontend-charter.md`/`frontend-architecture.md` for the frontend's.
+more complex systems against. See `backend/` for the backend's technical
+decisions, and `frontend/` for the frontend's.

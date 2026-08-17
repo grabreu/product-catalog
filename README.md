@@ -20,22 +20,15 @@ tests running through the real HTTP pipeline against a disposable SQL
 Server. CI runs format, unit, and integration checks plus a SonarCloud
 quality gate on every push/PR; CD publishes and deploys on every push to
 `main`. V5 (frontend) planned - see
-[`docs/frontend-charter.md`](docs/frontend-charter.md).
+[`docs/frontend/charter.md`](docs/frontend/charter.md).
 
 ## Documentation
 
 - [`docs/product-definition.md`](docs/product-definition.md) - problem,
   scope, and competencies this project demonstrates
-- [`docs/charter.md`](docs/charter.md) - backend scope, stack facts, and
-  repository structure
-- [`docs/domain-model.md`](docs/domain-model.md) - domain model and class
-  diagram
-- [`docs/architecture.md`](docs/architecture.md) - backend layers, domain
-  event dispatch, and request flow
-- [`docs/frontend-charter.md`](docs/frontend-charter.md) - frontend scope,
-  stack facts, and repository structure
-- [`docs/frontend-architecture.md`](docs/frontend-architecture.md) -
-  frontend data flow and backend contract
+- [`docs/backend/`](docs/backend/) - backend charter, architecture, and
+  domain model
+- [`docs/frontend/`](docs/frontend/) - frontend charter and architecture
 - [`docs/adr/`](docs/adr/) - architecture decision records: the
   alternative considered and why it lost
 
@@ -44,10 +37,10 @@ quality gate on every push/PR; CD publishes and deploys on every push to
 **Backend:** .NET 10, ASP.NET Core Minimal API, EF Core + SQL Server,
 OpenTelemetry + Serilog. Hosted on Azure Container Apps + Azure SQL,
 deployed via GitHub Actions on every push to `main`. Full facts:
-[`docs/charter.md`](docs/charter.md).
+[`docs/backend/charter.md`](docs/backend/charter.md).
 
 **Frontend (planned):** Vite + React, TanStack Router/Query/Form,
 shadcn/ui + Tailwind. Full facts:
-[`docs/frontend-charter.md`](docs/frontend-charter.md).
+[`docs/frontend/charter.md`](docs/frontend/charter.md).
 
 The reasoning behind each choice, either side: [`docs/adr/`](docs/adr/).
