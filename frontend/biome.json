@@ -6,6 +6,9 @@
     "useIgnoreFile": true,
     "root": "../"
   },
+  "files": {
+    "includes": ["**", "!src/lib/api", "!src/routeTree.gen.ts"]
+  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",

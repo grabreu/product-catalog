@@ -4,6 +4,8 @@ using ProductCatalog.Application.Commands.Products.Create;
 using ProductCatalog.Application.Commands.Products.Deactivate;
 using ProductCatalog.Application.Commands.Products.Reactivate;
 using ProductCatalog.Application.Commands.Products.Update;
+using ProductCatalog.Application.Models;
+using ProductCatalog.Application.Models.Products;
 using ProductCatalog.Application.Queries.Products.GetById;
 using ProductCatalog.Application.Queries.Products.List;
 
@@ -17,28 +19,47 @@ public static class ProductEndpoints
             .WithTags("Products");
 
         group.MapPost("/", CreateProductAsync)
-            .WithName("CreateProduct");
+            .WithName("CreateProduct")
+            .Produces<ProductDto>(StatusCodes.Status201Created)
+            .ProducesValidationProblem()
+            .ProducesProblem(StatusCodes.Status409Conflict);
 
         group.MapGet("/", GetProductsAsync)
-            .WithName("GetProducts");
+            .WithName("GetProducts")
+            .Produces<PagedResult<ProductDto>>(StatusCodes.Status200OK)
+            .ProducesValidationProblem();
 
         group.MapGet("/{id:guid}", GetProductByIdAsync)
-            .WithName("GetProductById");
+            .WithName("GetProductById")
+            .Produces<ProductDto>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPut("/{id:guid}", UpdateProductAsync)
-            .WithName("UpdateProduct");
+            .WithName("UpdateProduct")
+            .Produces<ProductDto>(StatusCodes.Status200OK)
+            .ProducesValidationProblem()
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPost("/{id:guid}/deactivate", DeactivateProductAsync)
-            .WithName("DeactivateProduct");
+            .WithName("DeactivateProduct")
+            .Produces<ProductDto>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPost("/{id:guid}/reactivate", ReactivateProductAsync)
-            .WithName("ReactivateProduct");
+            .WithName("ReactivateProduct")
+            .Produces<ProductDto>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPatch("/{id:guid}/stock", AdjustStockAsync)
-            .WithName("AdjustStock");
+            .WithName("AdjustStock")
+            .Produces<ProductDto>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPatch("/{id:guid}/price", ChangePriceAsync)
-            .WithName("ChangePrice");
+            .WithName("ChangePrice")
+            .Produces<ProductDto>(StatusCodes.Status200OK)
+            .ProducesValidationProblem()
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         return app;
     }
