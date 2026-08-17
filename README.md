@@ -10,8 +10,8 @@ domain complexity or authentication obscuring the fundamentals.
 
 ## Status
 
-V1-V4 complete: clean architecture baseline, integration tests + CI
-pipeline, observability (OpenTelemetry/Serilog, health checks wired to
+Backend (V1-V4) complete: clean architecture baseline, integration tests +
+CI pipeline, observability (OpenTelemetry/Serilog, health checks wired to
 Azure Container Apps probes), and documentation discipline (ADRs). Full
 CRUD for `Product`: create, read (by id and paginated list, filterable by
 `isActive`), update, adjust stock, deactivate/reactivate (soft delete,
@@ -19,24 +19,28 @@ reversible). Covered by unit tests (Domain/Application) and integration
 tests running through the real HTTP pipeline against a disposable SQL
 Server. CI runs format, unit, and integration checks plus a SonarCloud
 quality gate on every push/PR; CD publishes and deploys on every push to
-`main`.
+`main`. V5 (frontend) planned - see
+[`docs/frontend/charter.md`](docs/frontend/charter.md).
 
 ## Documentation
 
 - [`docs/product-definition.md`](docs/product-definition.md) - problem,
   scope, and competencies this project demonstrates
-- [`docs/charter.md`](docs/charter.md) - scope, stack facts, and repository
-  structure
-- [`docs/domain-model.md`](docs/domain-model.md) - domain model and class
-  diagram
-- [`docs/architecture.md`](docs/architecture.md) - layers, domain event
-  dispatch, and request flow
+- [`docs/backend/`](docs/backend/) - backend charter, architecture, and
+  domain model
+- [`docs/frontend/`](docs/frontend/) - frontend charter and architecture
 - [`docs/adr/`](docs/adr/) - architecture decision records: the
   alternative considered and why it lost
 
 ## Stack
 
-.NET 10, ASP.NET Core Minimal API, EF Core + SQL Server, OpenTelemetry +
-Serilog. Hosted on Azure Container Apps + Azure SQL, deployed via GitHub
-Actions on every push to `main`. Full facts: [`docs/charter.md`](docs/charter.md);
-the reasoning behind each choice: [`docs/adr/`](docs/adr/).
+**Backend:** .NET 10, ASP.NET Core Minimal API, EF Core + SQL Server,
+OpenTelemetry + Serilog. Hosted on Azure Container Apps + Azure SQL,
+deployed via GitHub Actions on every push to `main`. Full facts:
+[`docs/backend/charter.md`](docs/backend/charter.md).
+
+**Frontend (planned):** Vite + React, TanStack Router/Query/Form,
+shadcn/ui + Tailwind. Full facts:
+[`docs/frontend/charter.md`](docs/frontend/charter.md).
+
+The reasoning behind each choice, either side: [`docs/adr/`](docs/adr/).

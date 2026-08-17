@@ -10,3 +10,7 @@
 | [0006](0006-aspire-for-local-dev-only.md) | Aspire for local dev orchestration only |
 | [0007](0007-observability-stack.md) | Observability: OpenTelemetry, Serilog, health checks |
 | [0008](0008-azure-container-apps-hosting.md) | Cloud hosting: Azure Container Apps, manual provisioning, OIDC deploy |
+| [0009](0009-frontend-spa-tanstack-ecosystem.md) | Frontend: Vite SPA + TanStack ecosystem over a full-stack meta-framework |
+| [0010](0010-generated-api-client.md) | Frontend: generated API client from the OpenAPI spec |
+| [0011](0011-feature-first-folder-structure.md) | Frontend: feature-first folder structure |
+| [0012](0012-frontend-hosting-and-cors.md) | Frontend: Azure Static Web Apps hosting, CORS on the API |

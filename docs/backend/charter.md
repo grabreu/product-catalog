@@ -10,7 +10,7 @@ domain and auth are intentionally trivial.
 
 CRUD for a single entity, `Product` - create, read, update, soft-delete,
 list with pagination. Full MVP scope and non-goals: see
-[`product-definition.md`](product-definition.md).
+[`product-definition.md`](../product-definition.md).
 
 ## Facts
 
@@ -24,7 +24,7 @@ list with pagination. Full MVP scope and non-goals: see
 | CI/CD          | GitHub Actions - format, unit/integration tests, SonarCloud, then publish (GHCR) and deploy (Azure Container Apps) on push to `main` |
 | Cloud hosting  | Azure Container Apps + Azure SQL (serverless, free tier)                                          |
 
-See [`docs/adr/`](adr/) for the reasoning behind these choices.
+See [`docs/adr/`](../adr/) for the reasoning behind these choices.
 
 ## Repository Structure
 
@@ -47,12 +47,18 @@ product-catalog/
 │   └── tests/
 │       ├── ProductCatalog.UnitTests/
 │       └── ProductCatalog.IntegrationTests/
-├── frontend/
+├── frontend/                       # see docs/frontend/charter.md - M1 not started yet
 ├── docs/
-│   ├── adr/                # architecture decision records
-│   ├── architecture.md
-│   ├── charter.md
-│   ├── domain-model.md
+│   ├── adr/                # architecture decision records, shared
+│   ├── backend/
+│   │   ├── README.md
+│   │   ├── architecture.md
+│   │   ├── charter.md
+│   │   └── domain-model.md
+│   ├── frontend/
+│   │   ├── README.md
+│   │   ├── architecture.md
+│   │   └── charter.md
 │   └── product-definition.md
 └── README.md
 ```
