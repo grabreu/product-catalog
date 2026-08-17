@@ -9,6 +9,7 @@ on:
       - "LICENSE"
       - ".gitignore"
       - ".gitattributes"
+      - "frontend/**"
 
 permissions:
   contents: read

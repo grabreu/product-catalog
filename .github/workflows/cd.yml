@@ -9,6 +9,7 @@ on:
       - "LICENSE"
       - ".gitignore"
       - ".gitattributes"
+      - "frontend/**"
   workflow_dispatch:
 
 permissions:
