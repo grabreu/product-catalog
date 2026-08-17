@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { CreateProductDialog } from "@/features/products/CreateProductDialog";
 import { getProductsOptions } from "@/lib/api/@tanstack/react-query.gen";
 
 export const Route = createFileRoute("/")({
@@ -18,14 +19,17 @@ function Index() {
   }
 
   return (
-    <ul>
-      {page?.items.map((product) => (
-        <li key={product.id}>
-          {product.name} — {product.sku} — ${product.price} — {product.category}{" "}
-          — stock: {product.stockQuantity} —{" "}
-          {product.isActive ? "active" : "inactive"}
-        </li>
-      ))}
-    </ul>
+    <div>
+      <CreateProductDialog />
+      <ul>
+        {page?.items.map((product) => (
+          <li key={product.id}>
+            {product.name} — {product.sku} — ${product.price} —{" "}
+            {product.category} — stock: {product.stockQuantity} —{" "}
+            {product.isActive ? "active" : "inactive"}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
