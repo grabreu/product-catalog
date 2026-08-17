@@ -30,12 +30,25 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
+var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(corsOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseCors();
 
 app.MapOpenApi();
 app.MapScalarApiReference();
