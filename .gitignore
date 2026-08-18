@@ -180,6 +180,9 @@ coverage*.json
 coverage*.xml
 coverage*.info
 
+# Coverage output directories (backend/coverage, frontend/coverage)
+coverage/
+
 # Visual Studio code coverage results
 *.coverage
 *.coveragexml
