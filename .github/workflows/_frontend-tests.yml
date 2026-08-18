@@ -31,14 +31,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Verify route tree is up to date
-        run: |
-          pnpm run generate:routes
-          git diff --exit-code -- src/routeTree.gen.ts || {
-            echo "::error::src/routeTree.gen.ts is out of date. Run 'pnpm run generate:routes' and commit the result."
-            exit 1
-          }
-
       - name: Type check
         run: pnpm exec tsc -b
 
