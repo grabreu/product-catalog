@@ -1,10 +1,11 @@
 import { useForm } from "@tanstack/react-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { PencilIcon } from "lucide-react";
 import { useState } from "react";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -31,29 +32,17 @@ import {
   updateProductMutation,
 } from "@/lib/api/@tanstack/react-query.gen";
 import type { ProductCategory, ProductDto } from "@/lib/api/types.gen";
+import { queryClient } from "@/lib/query/queryClient";
+import { PRODUCT_CATEGORIES } from "../../constants/product";
+import { editProductFormSchema } from "../../schemas/product";
 
-const categories: ProductCategory[] = [
-  "Electronics",
-  "Apparel",
-  "Home",
-  "Other",
-];
+export type ProductEditDialogProps = {
+  product: ProductDto;
+};
 
-const editProductSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .max(200, "Name must be at most 200 characters"),
-  description: z
-    .string()
-    .max(2000, "Description must be at most 2000 characters"),
-  category: z.enum(categories, "Category is required"),
-});
-
-export function EditProductDialog({ product }: { product: ProductDto }) {
-  const [open, setOpen] = useState(false);
-  const queryClient = useQueryClient();
-  const formId = `edit-product-form-${product.id}`;
+export const ProductEditDialog = ({ product }: ProductEditDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const formId = `product-edit-${product.id}`;
 
   const mutation = useMutation({
     ...updateProductMutation(),
@@ -70,38 +59,49 @@ export function EditProductDialog({ product }: { product: ProductDto }) {
       category: product.category,
     },
     validators: {
-      onSubmit: editProductSchema,
+      onSubmit: editProductFormSchema,
     },
     onSubmit: async ({ value }) => {
-      const body = editProductSchema.parse(value);
+      const body = editProductFormSchema.parse(value);
       await mutation.mutateAsync({ body, path: { id: product.id } });
     },
   });
 
-  function handleOpenChange(nextOpen: boolean) {
-    setOpen(nextOpen);
+  const handleOpenChange = (nextOpen: boolean) => {
+    setIsOpen(nextOpen);
     if (!nextOpen) {
       form.reset();
       mutation.reset();
     }
-  }
+  };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger render={<Button variant="outline">Edit</Button>} />
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogTrigger
+        render={
+          <Button
+            variant="secondary"
+            size="icon-sm"
+            className="bg-background/80 backdrop-blur-sm"
+          >
+            <PencilIcon />
+            <span className="sr-only">Edit</span>
+          </Button>
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Product</DialogTitle>
         </DialogHeader>
-
         <form
           id={formId}
           onSubmit={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             form.handleSubmit();
           }}
         >
-          <FieldGroup>
+          <FieldGroup className="text-sm gap-4">
             <form.Field name="name">
               {(field) => {
                 const isInvalid =
@@ -165,7 +165,7 @@ export function EditProductDialog({ product }: { product: ProductDto }) {
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map((category) => (
+                        {PRODUCT_CATEGORIES.map((category) => (
                           <SelectItem key={category} value={category}>
                             {category}
                           </SelectItem>
@@ -189,13 +189,13 @@ export function EditProductDialog({ product }: { product: ProductDto }) {
             </p>
           )}
         </form>
-
-        <DialogFooter showCloseButton>
-          <Button type="submit" form={formId} disabled={mutation.isPending}>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline">Cancel</Button>} />
+          <Button form={formId} type="submit" disabled={mutation.isPending}>
             {mutation.isPending ? "Saving..." : "Save"}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
-}
+};

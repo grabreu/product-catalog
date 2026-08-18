@@ -1,11 +1,13 @@
 import { useForm } from "@tanstack/react-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { CirclePlusIcon } from "lucide-react";
 import { useState } from "react";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -30,28 +32,12 @@ import {
   getProductsQueryKey,
 } from "@/lib/api/@tanstack/react-query.gen";
 import type { ProductCategory } from "@/lib/api/types.gen";
+import { queryClient } from "@/lib/query/queryClient";
+import { PRODUCT_CATEGORIES } from "../../constants/product";
+import { createProductFormSchema } from "../../schemas/product";
 
-const FORM_ID = "create-product-form";
-
-const categories: ProductCategory[] = [
-  "Electronics",
-  "Apparel",
-  "Home",
-  "Other",
-];
-
-const createProductSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  sku: z.string().min(1, "SKU is required"),
-  price: z
-    .string()
-    .refine((value) => Number(value) > 0, "Price must be greater than 0"),
-  category: z.enum(categories, "Category is required"),
-});
-
-export function CreateProductDialog() {
-  const [open, setOpen] = useState(false);
-  const queryClient = useQueryClient();
+export const ProductCreateDialog = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
   const mutation = useMutation({
     ...createProductMutation(),
@@ -66,41 +52,51 @@ export function CreateProductDialog() {
       name: "",
       sku: "",
       price: "",
-      category: "" as ProductCategory | "",
+      category: "",
     },
     validators: {
-      onSubmit: createProductSchema,
+      onSubmit: createProductFormSchema,
     },
     onSubmit: async ({ value }) => {
-      const body = createProductSchema.parse(value);
+      const body = createProductFormSchema.parse(value);
       await mutation.mutateAsync({ body });
     },
   });
 
-  function handleOpenChange(nextOpen: boolean) {
-    setOpen(nextOpen);
+  const handleOpenChange = (nextOpen: boolean) => {
+    setIsOpen(nextOpen);
     if (!nextOpen) {
       form.reset();
       mutation.reset();
     }
-  }
+  };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger render={<Button>New Product</Button>} />
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogTrigger
+        render={
+          <Button>
+            <CirclePlusIcon />
+            New Product
+          </Button>
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>New Product</DialogTitle>
+          <DialogDescription>
+            Fill in the fields below to add a product to the list.
+          </DialogDescription>
         </DialogHeader>
-
         <form
-          id={FORM_ID}
+          id="product-create"
           onSubmit={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             form.handleSubmit();
           }}
         >
-          <FieldGroup>
+          <FieldGroup className="text-sm gap-4">
             <form.Field name="name">
               {(field) => {
                 const isInvalid =
@@ -189,7 +185,7 @@ export function CreateProductDialog() {
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map((category) => (
+                        {PRODUCT_CATEGORIES.map((category) => (
                           <SelectItem key={category} value={category}>
                             {category}
                           </SelectItem>
@@ -204,20 +200,18 @@ export function CreateProductDialog() {
               }}
             </form.Field>
           </FieldGroup>
-
-          {mutation.isError && (
-            <p role="alert" className="mt-4 text-sm text-destructive">
-              {mutation.error.detail ?? mutation.error.title}
-            </p>
-          )}
         </form>
-
-        <DialogFooter showCloseButton>
-          <Button type="submit" form={FORM_ID} disabled={mutation.isPending}>
-            {mutation.isPending ? "Creating..." : "Create"}
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline">Cancel</Button>} />
+          <Button
+            form="product-create"
+            type="submit"
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? "Saving..." : "Save"}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
-}
+};
