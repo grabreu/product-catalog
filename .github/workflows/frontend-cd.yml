@@ -1,0 +1,50 @@
+name: Frontend CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-cd.yml"
+      - ".github/workflows/_frontend-format.yml"
+      - ".github/workflows/_frontend-tests.yml"
+      - ".github/workflows/_frontend-sonar.yml"
+      - ".github/workflows/_frontend-build.yml"
+      - ".github/workflows/_frontend-deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: frontend-cd-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  format:
+    name: Format
+    uses: ./.github/workflows/_frontend-format.yml
+
+  tests:
+    name: Tests
+    uses: ./.github/workflows/_frontend-tests.yml
+
+  sonarcloud:
+    name: SonarCloud
+    needs: [format, tests]
+    uses: ./.github/workflows/_frontend-sonar.yml
+    secrets:
+      FRONTEND_SONAR_TOKEN: ${{ secrets.FRONTEND_SONAR_TOKEN }}
+
+  build:
+    name: Build
+    needs: [sonarcloud]
+    uses: ./.github/workflows/_frontend-build.yml
+
+  deploy:
+    name: Deploy
+    needs: [build]
+    uses: ./.github/workflows/_frontend-deploy.yml
+    secrets:
+      AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
