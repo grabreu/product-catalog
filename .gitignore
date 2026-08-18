@@ -10,6 +10,10 @@
 *.userosscache
 *.sln.docstates
 *.env
+.env.local
+.env.*.local
+# Non-secret shared default; *.env above would otherwise ignore it too
+!frontend/.env
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
