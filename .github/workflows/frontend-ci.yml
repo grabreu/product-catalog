@@ -33,4 +33,4 @@ jobs:
     if: github.actor != 'dependabot[bot]'
     uses: ./.github/workflows/_frontend-sonar.yml
     secrets:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.FRONTEND_SONAR_TOKEN }}

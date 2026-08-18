@@ -3,7 +3,7 @@ name: Reusable / Frontend SonarCloud
 on:
   workflow_call:
     secrets:
-      SONAR_TOKEN:
+      FRONTEND_SONAR_TOKEN:
         required: true
 
 jobs:
@@ -39,4 +39,4 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.exclusions=src/lib/api/**,src/components/ui/**,src/routeTree.gen.ts
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.FRONTEND_SONAR_TOKEN }}
