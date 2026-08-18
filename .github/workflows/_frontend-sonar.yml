@@ -1,0 +1,42 @@
+name: Reusable / Frontend SonarCloud
+
+on:
+  workflow_call:
+    secrets:
+      FRONTEND_SONAR_TOKEN:
+        required: true
+
+jobs:
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Download coverage
+        uses: actions/download-artifact@v8
+        with:
+          name: coverage-frontend
+          path: frontend/coverage
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v8
+        with:
+          projectBaseDir: frontend
+          args: >
+            -Dsonar.organization=grabreu
+            -Dsonar.projectKey=grabreu_product-catalog_frontend
+            -Dsonar.sources=src
+            -Dsonar.test.inclusions=**/*.test.ts,**/*.test.tsx
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.exclusions=src/lib/api/**,src/components/ui/**,src/routeTree.gen.ts
+        env:
+          SONAR_TOKEN: ${{ secrets.FRONTEND_SONAR_TOKEN }}

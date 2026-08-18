@@ -1,0 +1,36 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-ci.yml"
+      - ".github/workflows/_frontend-format.yml"
+      - ".github/workflows/_frontend-tests.yml"
+      - ".github/workflows/_frontend-sonar.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: frontend-ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: Format
+    uses: ./.github/workflows/_frontend-format.yml
+
+  tests:
+    name: Tests
+    uses: ./.github/workflows/_frontend-tests.yml
+
+  sonarcloud:
+    name: SonarCloud
+    needs: [format, tests]
+    if: github.actor != 'dependabot[bot]'
+    uses: ./.github/workflows/_frontend-sonar.yml
+    secrets:
+      SONAR_TOKEN: ${{ secrets.FRONTEND_SONAR_TOKEN }}

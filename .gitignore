@@ -10,6 +10,10 @@
 *.userosscache
 *.sln.docstates
 *.env
+.env.local
+.env.*.local
+# Non-secret shared default; *.env above would otherwise ignore it too
+!frontend/.env
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -175,6 +179,9 @@ _TeamCity*
 coverage*.json
 coverage*.xml
 coverage*.info
+
+# Coverage output directories (backend/coverage, frontend/coverage)
+coverage/
 
 # Visual Studio code coverage results
 *.coverage
