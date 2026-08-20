@@ -30,6 +30,6 @@ jobs:
         with:
           inlineScript: |
             az containerapp update \
-              --name ca-product-catalog-api \
-              --resource-group rg-product-catalog \
+              --name ca-product-catalog-api-prod-brs \
+              --resource-group rg-shared-prod-brs \
               --image ${{ inputs.image_ref }}
