@@ -1,46 +1,45 @@
-# Product Catalog
+# product-catalog
 
-[![CI](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml/badge.svg)](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml)
-[![CD](https://github.com/grabreu/product-catalog/actions/workflows/cd.yml/badge.svg)](https://github.com/grabreu/product-catalog/actions/workflows/cd.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=grabreu_product-catalog&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=grabreu_product-catalog)
+[![CI](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml)
+[![CD](https://github.com/grabreu/product-catalog/actions/workflows/cd.yml/badge.svg?branch=main)](https://github.com/grabreu/product-catalog/actions/workflows/cd.yml)
+[![License](https://img.shields.io/github/license/grabreu/product-catalog?style=flat-square)](LICENSE)
 
-A deliberately minimal reference API - full CRUD for a single entity,
-demonstrating Clean Architecture, CQRS-lite, and testing practices without
-domain complexity or authentication obscuring the fundamentals.
+A backend-only reference API for a product catalog: minimal writes, rich read/query surface.
 
-## Status
+_The domain is deliberately flat — two validation rules, no state machine — so the focus stays on the architecture, testing, and deployment rigor around it, not domain complexity._
 
-Backend (V1-V4) complete: clean architecture baseline, integration tests +
-CI pipeline, observability (OpenTelemetry/Serilog, health checks wired to
-Azure Container Apps probes), and documentation discipline (ADRs). Full
-CRUD for `Product`: create, read (by id and paginated list, filterable by
-`isActive`), update, adjust stock, deactivate/reactivate (soft delete,
-reversible). Covered by unit tests (Domain/Application) and integration
-tests running through the real HTTP pipeline against a disposable SQL
-Server. CI runs format, unit, and integration checks plus a SonarCloud
-quality gate on every push/PR; CD publishes and deploys on every push to
-`main`. V5 (frontend) planned - see
-[`docs/frontend/charter.md`](docs/frontend/charter.md).
+**[Try it live →](https://ca-product-catalog-prod-brs.gentlecliff-429b9963.brazilsouth.azurecontainerapps.io)**
 
-## Documentation
+## Tech stack
 
-- [`docs/product-definition.md`](docs/product-definition.md) - problem,
-  scope, and competencies this project demonstrates
-- [`docs/backend/`](docs/backend/) - backend charter, architecture, and
-  domain model
-- [`docs/frontend/`](docs/frontend/) - frontend charter and architecture
-- [`docs/adr/`](docs/adr/) - architecture decision records: the
-  alternative considered and why it lost
+.NET 10 Minimal APIs · Vertical Slice + CQRS · EF Core + SQL Server · Mediator + FluentValidation + Desfecho · Serilog
 
-## Stack
+## Features
 
-**Backend:** .NET 10, ASP.NET Core Minimal API, EF Core + SQL Server,
-OpenTelemetry + Serilog. Hosted on Azure Container Apps + Azure SQL,
-deployed via GitHub Actions on every push to `main`. Full facts:
-[`docs/backend/charter.md`](docs/backend/charter.md).
+- **Full product lifecycle** — create, update, deactivate and reactivate; deactivation is a reversible soft delete, not a hard delete.
+- **Stock and price as dedicated actions** — stock changes apply a delta, price changes set a new absolute value, each through its own endpoint instead of a generic update.
+- **Paged listing** — filterable by active status.
+- **Get by id**
 
-**Frontend (planned):** Vite + React, TanStack Router/Query/Form,
-shadcn/ui + Tailwind. Full facts:
-[`docs/frontend/charter.md`](docs/frontend/charter.md).
+See [docs/architecture.md](docs/architecture.md) for the domain model and request flow, and [docs/adr/](docs/adr/) for the reasoning behind these decisions.
 
-The reasoning behind each choice, either side: [`docs/adr/`](docs/adr/).
+## Development
+
+Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download) and SQL Server LocalDB (or point `ConnectionStrings:DefaultConnection` in `appsettings.Development.json` at another SQL Server instance).
+
+```bash
+dotnet restore
+dotnet run --project src/ProductCatalog.Api
+```
+
+Migrations and seed data run automatically on startup in Development. The app opens to `/scalar` for the OpenAPI explorer.
+
+Other commands: `dotnet format --verify-no-changes` (formatting check, matches CI).
+
+## Deployment
+
+Auto-deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) on every merge to `main` via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub, no Terraform or Bicep.
+
+## License
+
+Licensed under the [MIT License](LICENSE).
