@@ -7,7 +7,7 @@ public class CreateProductHandler(ApplicationDbContext dbContext) : ICommandHand
 {
     public async ValueTask<Result<ProductDto>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        if (!await dbContext.Products.AnyAsync(tl => tl.Sku == command.Sku, cancellationToken))
+        if (await dbContext.Products.AnyAsync(tl => tl.Sku == command.Sku, cancellationToken))
         {
             return Error.Conflict("Products.SkuAlreadyExists", $"A product with SKU '{command.Sku}' already exists.");
         }
