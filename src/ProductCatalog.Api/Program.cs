@@ -7,7 +7,7 @@ using ProductCatalog.Api.Features.Products.ChangeProductPrice;
 using ProductCatalog.Api.Features.Products.CreateProduct;
 using ProductCatalog.Api.Features.Products.DeactivateProduct;
 using ProductCatalog.Api.Features.Products.GetProductById;
-using ProductCatalog.Api.Features.Products.GetProducts;
+using ProductCatalog.Api.Features.Products.ListProducts;
 using ProductCatalog.Api.Features.Products.ReactivateProduct;
 using ProductCatalog.Api.Features.Products.UpdateProduct;
 
@@ -72,7 +72,7 @@ app.MapChangeProductPriceEndpoint();
 app.MapCreateProductEndpoint();
 app.MapDeactivateProductEndpoint();
 app.MapGetProductByIdEndpoint();
-app.MapGetProductsEndpoint();
+app.MapListProductsEndpoint();
 app.MapReactivateProductEndpoint();
 app.MapUpdateProductEndpoint();
 

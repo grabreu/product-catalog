@@ -1,11 +1,11 @@
 using ProductCatalog.Api.Common.Models;
 using ProductCatalog.Api.Data;
 
-namespace ProductCatalog.Api.Features.Products.GetProducts;
+namespace ProductCatalog.Api.Features.Products.ListProducts;
 
-public class GetProductsHandler(ApplicationDbContext dbContext) : IQueryHandler<GetProductsQuery, Result<PagedResult<ProductDto>>>
+public class ListProductsHandler(ApplicationDbContext dbContext) : IQueryHandler<ListProductsQuery, Result<PagedResult<ProductDto>>>
 {
-    public async ValueTask<Result<PagedResult<ProductDto>>> Handle(GetProductsQuery query, CancellationToken cancellationToken)
+    public async ValueTask<Result<PagedResult<ProductDto>>> Handle(ListProductsQuery query, CancellationToken cancellationToken)
     {
         var queryable = dbContext.Products.AsNoTracking();
 
