@@ -8,6 +8,8 @@ A backend-only reference API for a product catalog: minimal writes, rich read/qu
 
 _The domain is deliberately flat — two validation rules, no state machine — so the focus stays on the architecture, testing, and deployment rigor around it, not domain complexity._
 
+**[Try it live →](https://ca-product-catalog-prod-brs.gentlecliff-429b9963.brazilsouth.azurecontainerapps.io)**
+
 ## Tech stack
 
 .NET 10 Minimal APIs · Vertical Slice + CQRS · EF Core + SQL Server · Mediator + FluentValidation + Desfecho · Serilog
