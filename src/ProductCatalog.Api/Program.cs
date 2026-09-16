@@ -54,12 +54,9 @@ var app = builder.Build();
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-    app.Map("/", () => Results.Redirect("/scalar"));
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
+app.Map("/", () => Results.Redirect("/scalar"));
 
 app.MapHealthChecks("/health");
 app.MapHealthChecks("/alive", new HealthCheckOptions
