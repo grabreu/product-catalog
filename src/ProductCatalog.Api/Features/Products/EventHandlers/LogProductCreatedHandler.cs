@@ -2,11 +2,14 @@ using ProductCatalog.Api.Domain.Products.Events;
 
 namespace ProductCatalog.Api.Features.Products.EventHandlers;
 
-public class LogProductCreatedHandler(ILogger<LogProductCreatedHandler> logger) : INotificationHandler<ProductCreatedDomainEvent>
+public partial class LogProductCreatedHandler(ILogger<LogProductCreatedHandler> logger) : INotificationHandler<ProductCreatedDomainEvent>
 {
     public ValueTask Handle(ProductCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Product {ProductId} was created.", notification.ProductId);
+        LogProductCreated(notification.ProductId);
         return ValueTask.CompletedTask;
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Product {ProductId} was created.")]
+    private partial void LogProductCreated(Guid productId);
 }
