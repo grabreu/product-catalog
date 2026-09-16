@@ -80,9 +80,6 @@ app.MapListProductsEndpoint();
 app.MapReactivateProductEndpoint();
 app.MapUpdateProductEndpoint();
 
-if (app.Environment.IsDevelopment())
-{
-    await app.Services.InitialiseDatabaseAsync();
-}
+await app.Services.InitialiseDatabaseAsync();
 
 await app.RunAsync();
