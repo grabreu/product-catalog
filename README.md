@@ -1,4 +1,4 @@
-# Product Catalog
+# product-catalog
 
 [![CI](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/grabreu/product-catalog/actions/workflows/ci.yml)
 [![CD](https://github.com/grabreu/product-catalog/actions/workflows/cd.yml/badge.svg?branch=main)](https://github.com/grabreu/product-catalog/actions/workflows/cd.yml)
@@ -36,7 +36,7 @@ Other commands: `dotnet format --verify-no-changes` (formatting check, matches C
 
 ## Deployment
 
-Deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub, no Terraform or Bicep.
+Auto-deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) on every merge to `main` via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub, no Terraform or Bicep.
 
 ## License
 

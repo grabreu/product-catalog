@@ -1,8 +1,10 @@
-# Product Catalog
+# product-catalog
 
 ## Repository
 
-A backend-only reference API for a product catalog: minimal writes, rich read/query surface (filtering, search, pagination, aggregation, facet counts). No frontend, ever. Read `README.md` before making changes.
+A backend-only reference API for a product catalog: minimal writes, filterable/paginated reads. No frontend, ever.
+
+Read `README.md` before making changes — it documents the project pitch. Read `docs/architecture.md` for the domain model, invariants, and request flow. Significant, hard-to-reverse decisions are recorded in `docs/adr/` — check it before revisiting one, and add an entry when making a new one (see the `domain-modeling` skill for the format).
 
 ## General Rules
 
@@ -39,17 +41,6 @@ Future-you revisiting this months later, or someone browsing the portfolio to se
 
 ## Project-Specific Guidelines
 
-### Architecture
-
-- Vertical Slice Architecture: feature folders, each holding its own command/query + handler. No separate controller layer — Minimal API endpoints only.
-- CQRS: commands for writes (`CreateProduct`, `UpdateProduct`, `ChangePrice`, `AdjustStock`, `DeactivateProduct`, `ReactivateProduct`), queries for reads (`ListProducts`, `GetProductById`, `GetCategoryFacetCounts`).
-- The domain is deliberately flat: field validation only (`Price` > 0, `StockQuantity` >= 0), no state-based business rules. Do not add invariants beyond these two — the point of this project is engineering rigor around a simple domain, not domain complexity.
-
-### Testing
-
-- Full test pyramid: unit tests (domain/application) + integration tests against a real SQL Server via Testcontainers.
-- Mutation testing with Stryker.NET proves the suite catches regressions, not just that it covers lines — run it, don't just add coverage.
-
 ### Source
 
 Generated, don't hand-edit:
@@ -58,11 +49,13 @@ Generated, don't hand-edit:
 
 Layout: feature slices in `Features/Products/<UseCase>/` (command/query + handler + validator + endpoint), domain in `Domain/Products/`, EF Core config in `Data/`, cross-cutting pipeline behaviors in `Common/Behaviors/`.
 
-### Current State
+### Validation
 
-- This is a redesign of the already-built [github.com/grabreu/product-catalog](https://github.com/grabreu/product-catalog): frontend dropped, moved to Vertical Slice.
-- Pending: reintroduce the test pyramid and mutation testing (excluded during the redesign).
+Run `dotnet format --verify-no-changes`, `dotnet build`, and `dotnet test` before considering a change done — CI (`.github/workflows/ci.yml`) runs the same on push/PR to `main`.
 
 ### Open Questions
 
+- TODO: reintroduce the test pyramid and mutation testing (excluded during the redesign).
 - TODO: Stryker.NET mutation score threshold to enforce in CI.
+- TODO: `GetCategoryFacetCounts` — count of active products per category, the one query requiring aggregation rather than filtering. Not implemented yet.
+- TODO: search — not implemented yet, exact shape undecided (by name? by SKU?).
