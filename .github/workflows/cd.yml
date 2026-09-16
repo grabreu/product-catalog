@@ -101,6 +101,6 @@ jobs:
         with:
           inlineScript: |
             az containerapp update \
-              --name ca-product-catalog-api-prod-brs \
+              --name ca-product-catalog-prod-brs \
               --resource-group rg-shared-prod-brs \
               --image ${{ needs.publish.outputs.image_ref }}
