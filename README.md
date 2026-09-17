@@ -8,7 +8,7 @@ A backend-only reference API for a product catalog: minimal writes, rich read/qu
 
 _The domain is deliberately flat — two validation rules, no state machine — so the focus stays on the architecture, testing, and deployment rigor around it, not domain complexity._
 
-**[Try it live →](https://ca-product-catalog-prod-brs.gentlecliff-429b9963.brazilsouth.azurecontainerapps.io)**
+**[Try it live →](https://product-catalog.grabreu.dev)**
 
 ## Tech stack
 
@@ -38,7 +38,7 @@ Other commands: `dotnet format --verify-no-changes` (formatting check, matches C
 
 ## Deployment
 
-Auto-deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) on every merge to `main` via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub, no Terraform or Bicep.
+Auto-deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) on every merge to `main` via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub, no Terraform or Bicep. Custom domain DNS managed via Cloudflare.
 
 ## License
 

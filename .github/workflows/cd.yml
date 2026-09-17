@@ -82,7 +82,7 @@ jobs:
 
     environment:
       name: prod
-      url: https://ca-product-catalog-prod-brs.gentlecliff-429b9963.brazilsouth.azurecontainerapps.io
+      url: https://product-catalog.grabreu.dev
 
     permissions:
       contents: read
