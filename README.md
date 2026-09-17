@@ -8,7 +8,7 @@ A backend-only reference API for a product catalog: minimal writes, rich read/qu
 
 _The domain is deliberately flat — two validation rules, no state machine — so the focus stays on the architecture, testing, and deployment rigor around it, not domain complexity._
 
-**[Try it live →](https://ca-product-catalog-prod-brs.gentlecliff-429b9963.brazilsouth.azurecontainerapps.io)**
+**[Try it live →](https://product-catalog.grabreu.dev)**
 
 ## Tech stack
 
