@@ -38,7 +38,7 @@ Other commands: `dotnet format --verify-no-changes` (formatting check, matches C
 
 ## Deployment
 
-Auto-deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) on every merge to `main` via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub, no Terraform or Bicep.
+Auto-deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) on every merge to `main` via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub, no Terraform or Bicep. Custom domain DNS managed via Cloudflare.
 
 ## License
 
