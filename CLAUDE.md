@@ -47,7 +47,9 @@ Generated, don't hand-edit:
 
 - `Data/Migrations/*.cs` and `ApplicationDbContextModelSnapshot.cs` — regenerate with `dotnet ef migrations add <Name> --project src/ProductCatalog.Api`.
 
-Layout: feature slices in `Features/Products/<UseCase>/` (command/query + handler + validator + endpoint), domain in `Domain/Products/`, EF Core config in `Data/`, cross-cutting pipeline behaviors in `Common/Behaviors/`.
+Layout: feature slices in `Features/Products/<UseCase>.cs` (command/query, validator, handler, and endpoint colocated in one file), domain in `Domain/Products/`, EF Core config in `Data/`, cross-cutting pipeline behaviors in `Common/Behaviors/`.
+
+Other projects: `src/ProductCatalog.AppHost/` is the .NET Aspire host for local development (SQL Server container and the API, connection string `DefaultConnection`); `src/ProductCatalog.ServiceDefaults/` holds the Aspire service defaults (OpenTelemetry, resilience, and the `/health` and `/alive` endpoints, mapped in Development only). The API calls `AddServiceDefaults` and `MapDefaultEndpoints`, and `EnrichSqlServerDbContext` adds retries and the database health check.
 
 ### Validation
 

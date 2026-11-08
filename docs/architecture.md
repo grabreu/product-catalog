@@ -4,6 +4,8 @@
 
 `Product` is the only aggregate root. Invariants: SKU is unique (enforced by a DB unique index), `Price > 0`, `StockQuantity >= 0`. Deactivation is a soft delete (`IsActive = false`), reversible via reactivation — products are never physically removed.
 
+Concurrent writes: `Product` carries a SQL Server `rowversion` token, so a write based on a stale read fails and responds 409; the client retries. A duplicate SKU responds 409 as well, including when two creates race and the unique index rejects the second.
+
 ```mermaid
 classDiagram
     class Product {

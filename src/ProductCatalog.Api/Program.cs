@@ -2,23 +2,12 @@ using ProductCatalog.Api.Common.Behaviors;
 using ProductCatalog.Api.Common.ExceptionHandling;
 using ProductCatalog.Api.Data;
 using ProductCatalog.Api.Data.Interceptors;
-using ProductCatalog.Api.Features.Products.AdjustProductStock;
-using ProductCatalog.Api.Features.Products.ChangeProductPrice;
-using ProductCatalog.Api.Features.Products.CreateProduct;
-using ProductCatalog.Api.Features.Products.DeactivateProduct;
-using ProductCatalog.Api.Features.Products.GetProductById;
-using ProductCatalog.Api.Features.Products.ListProducts;
-using ProductCatalog.Api.Features.Products.ReactivateProduct;
-using ProductCatalog.Api.Features.Products.UpdateProduct;
+using ProductCatalog.Api.Features.Products;
+using ProductCatalog.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, services, configuration) =>
-{
-    configuration.ReadFrom.Configuration(context.Configuration)
-        .ReadFrom.Services(services)
-        .Enrich.FromLogContext();
-});
+builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi(options =>
 {
@@ -30,12 +19,9 @@ builder.Services.AddOpenApi(options =>
 });
 
 builder.Services.AddExceptionHandler<DomainExceptionHandler>();
+builder.Services.AddExceptionHandler<ConcurrencyExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
-
-builder.Services.AddHealthChecks()
-    .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"])
-    .AddDbContextCheck<ApplicationDbContext>();
 
 builder.Services.AddMediator(options =>
 {
@@ -56,20 +42,17 @@ builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
         .AddInterceptors(sp.GetRequiredService<DispatchDomainEventsInterceptor>());
 });
 
+builder.EnrichSqlServerDbContext<ApplicationDbContext>();
+
 var app = builder.Build();
 
-app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
+
+app.MapDefaultEndpoints();
 
 app.MapOpenApi();
 app.MapScalarApiReference();
 app.Map("/", () => Results.Redirect("/scalar"));
-
-app.MapHealthChecks("/health");
-app.MapHealthChecks("/alive", new HealthCheckOptions
-{
-    Predicate = r => r.Tags.Contains("live")
-});
 
 app.MapAdjustProductStockEndpoint();
 app.MapChangeProductPriceEndpoint();

@@ -36,6 +36,7 @@ public class Product : HasDomainEventsBase
     public bool IsActive { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
+    public byte[] RowVersion { get; private set; } = null!;
 
     public void Update(string name, string description, ProductCategory category)
     {

@@ -3,6 +3,7 @@ WORKDIR /src
 
 COPY Directory.Build.props Directory.Packages.props ./
 COPY src/ProductCatalog.Api/ProductCatalog.Api.csproj src/ProductCatalog.Api/
+COPY src/ProductCatalog.ServiceDefaults/ProductCatalog.ServiceDefaults.csproj src/ProductCatalog.ServiceDefaults/
 
 RUN dotnet restore src/ProductCatalog.Api/ProductCatalog.Api.csproj
 
