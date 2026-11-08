@@ -4,6 +4,6 @@ The project's own resources are declared in Bicep under `infra/`: the Container 
 
 Deployment stays manual: `az deployment group create` with the `image` parameter, which is required on every run so a redeploy does not revert the image CD published. The custom domain (`product-catalog.grabreu.dev`) needs its managed certificate, which can only be created through the CLI after the hostname is bound; its name goes in the `customDomainCertificateName` parameter, and a deploy with it empty removes the custom domain.
 
-This supersedes the "no IaC" and GitHub Container Registry parts of [ADR 0004](0004-azure-container-apps-hosting.md).
+ADR 0004 originally chose no IaC and GitHub Container Registry; this replaces both.
 
-**Consequences**: a Bicep deployment is a manual step whenever configuration or infrastructure changes. First-time setup (CD identity, registry roles, SQL grants for the app identity) follows `docs/bootstrap-project-identity.md` in `azure-infra`, with `productcatalog` as the project name. TODO: the infrastructure has not been deployed from this template yet.
+**Consequences**: a Bicep deployment is a manual step whenever configuration or infrastructure changes. First-time setup (CD identity, registry roles, SQL grants for the app identity) follows `docs/bootstrap-project-identity.md` in `azure-infra`, with `productcatalog` as the project name. The first deploy leaves the Container App in a `Failed` state, because the registry is configured with the app's own identity (even for a public placeholder image) and that identity has no `AcrPull` yet; grant the roles, then deploy again. TODO: verify the first CD run end to end.

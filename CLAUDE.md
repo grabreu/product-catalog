@@ -55,7 +55,7 @@ Other projects: `src/ProductCatalog.AppHost/` is the .NET Aspire host for local 
 
 ### Validation
 
-Run `dotnet format --verify-no-changes`, `dotnet build`, and `dotnet test` before considering a change done — CI (`.github/workflows/ci.yml`) runs the same on push/PR to `main`.
+Run from the repo root: `dotnet restore`, `dotnet format --no-restore --verify-no-changes --severity info`, `dotnet build --no-restore -c Release`, and `dotnet test --no-build -c Release` (no test projects yet) before considering a change done — CI (`.github/workflows/ci.yml`) runs the same on push/PR to `main`.
 
 ### Open Questions
 
