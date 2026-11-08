@@ -3,8 +3,8 @@ param location string = 'brazilsouth'
 @description('Image reference, tag or digest. Required on every deploy so a redeploy does not revert the image published by CD.')
 param image string
 
-@description('Name of the managed certificate bound to the custom domain. Leave empty until the hostname is bound and the certificate is created through the CLI; a deploy with it empty removes the custom domain.')
-param customDomainCertificateName string = ''
+@description('Name of the managed certificate bound to the custom domain, created through the CLI after the hostname is bound. A deploy with it empty removes the custom domain.')
+param customDomainCertificateName string = 'mc-cae-grabreu-pr-product-catalog--4959'
 
 var tags = {
   project: 'productcatalog'
