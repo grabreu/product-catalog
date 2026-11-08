@@ -1,19 +1,13 @@
 <Solution>
-  <Folder Name="/Solution Items/">
-    <File Path=".gitattributes" />
-    <File Path=".github/dependabot.yml" />
-    <File Path=".github/workflows/ci.yml" />
-    <File Path=".gitignore" />
-    <File Path="CLAUDE.md" />
+  <Folder Name="/_Host/">
+    <Project Path="src/ProductCatalog.Api/ProductCatalog.Api.csproj" />
+    <Project Path="src/ProductCatalog.AppHost/ProductCatalog.AppHost.csproj" />
+    <Project Path="src/ProductCatalog.ServiceDefaults/ProductCatalog.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/__Solution Items/">
+    <File Path=".editorconfig" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
-    <File Path=".dockerignore" />
-    <File Path=".editorconfig" />
-    <File Path="LICENSE" />
-    <File Path="README.md" />
+    <File Path="global.json" />
   </Folder>
-  <Folder Name="/src/">
-    <Project Path="src/ProductCatalog.Api/ProductCatalog.Api.csproj" />
-  </Folder>
-  <Folder Name="/tests/" />
 </Solution>

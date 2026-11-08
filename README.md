@@ -12,7 +12,7 @@ _The domain is deliberately flat — two validation rules, no state machine — 
 
 ## Tech stack
 
-.NET 10 Minimal APIs · Vertical Slice + CQRS · EF Core + SQL Server · Mediator + FluentValidation + Desfecho · Serilog
+.NET 10 Minimal APIs · Vertical Slice + CQRS · EF Core + SQL Server · Mediator + FluentValidation + Desfecho · OpenTelemetry · .NET Aspire for local orchestration
 
 ## Features
 
@@ -25,14 +25,14 @@ See [docs/architecture.md](docs/architecture.md) for the domain model and reques
 
 ## Development
 
-Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download) and SQL Server LocalDB (or point `ConnectionStrings:DefaultConnection` in `appsettings.Development.json` at another SQL Server instance).
+Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download) and a container runtime (Docker), since the AppHost starts a SQL Server container.
 
 ```bash
 dotnet restore
-dotnet run --project src/ProductCatalog.Api
+dotnet run --project src/ProductCatalog.AppHost
 ```
 
-Migrations and seed data run automatically on startup in Development. The app opens to `/scalar` for the OpenAPI explorer.
+The AppHost starts SQL Server and the API. Migrations and seed data run automatically on startup, and the API reference (Scalar) is served at `/scalar`.
 
 Other commands: `dotnet format --verify-no-changes` (formatting check, matches CI).
 

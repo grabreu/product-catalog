@@ -21,7 +21,7 @@ public class ValidationBehavior<TMessage, TResponse>(IEnumerable<IValidator<TMes
 
         if (failures.Count > 0)
         {
-            var errors = failures.ConvertAll(failure => Error.Validation(failure.PropertyName, failure.ErrorMessage));
+            var errors = new ErrorList(failures.Select(failure => Result.Invalid(failure.PropertyName, failure.ErrorMessage)));
             return (dynamic)errors;
         }
 

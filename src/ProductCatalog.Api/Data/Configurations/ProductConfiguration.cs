@@ -26,6 +26,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Price)
             .HasPrecision(18, 2);
 
+        builder.Property(x => x.RowVersion)
+            .IsRowVersion();
+
         builder.Ignore(x => x.DomainEvents);
     }
 }
