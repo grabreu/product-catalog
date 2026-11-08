@@ -1,7 +1,7 @@
-# Azure Container Apps hosting, OIDC federated credential, no IaC
+# Azure Container Apps hosting, OIDC federated credential
 
-Hosted on Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier), provisioned by hand through the Azure Portal/CLI — no Terraform or Bicep, since this is a single always-on environment with no team beyond one developer. GitHub Actions deploys via an OIDC federated credential scoped to the prod environment, so no Azure credential is stored in GitHub.
+Hosted on Azure Container Apps (Consumption plan) with Azure SQL (serverless, free tier), inside the shared Container Apps environment `cae-grabreu-prod-brs`. GitHub Actions deploys through an OIDC federated credential on a user-assigned managed identity (`id-productcatalog-cd-prod-brs`), with subjects for the `main` branch and the `prod` environment, so no Azure credential is stored in GitHub. How the infrastructure is declared and how the image is published is in [ADR 0006](0006-project-infrastructure-in-bicep.md).
 
-**Consequences**: no IaC to maintain for one environment; would need revisiting if a second environment or shared ownership shows up.
+Custom domain (`product-catalog.grabreu.dev`) is bound with Container Apps' free managed certificate, with DNS on Cloudflare. The CNAME and the TXT (`asuid`) record must stay **DNS only** (unproxied): the proxy breaks both the managed certificate's domain validation and SNI-based routing in the shared environment.
 
-Custom domain (`product-catalog.grabreu.dev`) bound via ACA's free managed certificate, DNS hosted on Cloudflare. The CNAME and TXT (`asuid`) records must stay **DNS only** (unproxied) — Cloudflare's proxy breaks both the managed certificate's domain validation and SNI-based routing in the shared `cae-shared-prod-brs` environment.
+**Consequences**: the environment is shared with other projects, so its settings and the DNS-only requirement apply to every app in it. The managed certificate is created through the CLI after the hostname is bound, and recreating the custom domain changes the certificate name.

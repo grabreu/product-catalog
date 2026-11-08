@@ -6,7 +6,7 @@
 
 A backend-only reference API for a product catalog: minimal writes, rich read/query surface.
 
-_The domain is deliberately flat — two validation rules, no state machine — so the focus stays on the architecture, testing, and deployment rigor around it, not domain complexity._
+_The domain is deliberately flat — two validation rules, no state machine — so the focus stays on the architecture and deployment around it, not domain complexity._
 
 **[Try it live →](https://product-catalog.grabreu.dev)**
 
@@ -18,6 +18,7 @@ _The domain is deliberately flat — two validation rules, no state machine — 
 
 - **Full product lifecycle** — create, update, deactivate and reactivate; deactivation is a reversible soft delete, not a hard delete.
 - **Stock and price as dedicated actions** — stock changes apply a delta, price changes set a new absolute value, each through its own endpoint instead of a generic update.
+- **Concurrency safety** — a write based on a stale read, or a duplicate SKU, responds 409 instead of overwriting.
 - **Paged listing** — filterable by active status.
 - **Get by id**
 
@@ -34,11 +35,11 @@ dotnet run --project src/ProductCatalog.AppHost
 
 The AppHost starts SQL Server and the API. Migrations and seed data run automatically on startup, and the API reference (Scalar) is served at `/scalar`.
 
-Other commands: `dotnet format --verify-no-changes` (formatting check, matches CI).
+Other commands: `dotnet build --no-restore -c Release` (build), `dotnet format --no-restore --verify-no-changes --severity info` (formatting check, matches CI).
 
 ## Deployment
 
-Auto-deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) on every merge to `main` via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub, no Terraform or Bicep. Custom domain DNS managed via Cloudflare.
+Auto-deployed to Azure Container Apps (Consumption plan) + Azure SQL (serverless, free tier) on every merge to `main` via GitHub Actions, authenticated with an OIDC federated credential scoped to the prod environment — no Azure credential stored in GitHub. The project's infrastructure is defined in Bicep (`infra/`); shared resources come from `azure-infra`. Custom domain DNS managed via Cloudflare.
 
 ## License
 

@@ -49,11 +49,13 @@ Generated, don't hand-edit:
 
 Layout: feature slices in `Features/Products/<UseCase>.cs` (command/query, validator, handler, and endpoint colocated in one file), domain in `Domain/Products/`, EF Core config in `Data/`, cross-cutting pipeline behaviors in `Common/Behaviors/`.
 
+Infrastructure: `infra/` has the Bicep for this project (`main.bicep`, `modules/sql-database.bicep`, `modules/container-app.bicep`); shared resources are referenced as existing (ADR 0006).
+
 Other projects: `src/ProductCatalog.AppHost/` is the .NET Aspire host for local development (SQL Server container and the API, connection string `DefaultConnection`); `src/ProductCatalog.ServiceDefaults/` holds the Aspire service defaults (OpenTelemetry, resilience, and the `/health` and `/alive` endpoints, mapped in Development only). The API calls `AddServiceDefaults` and `MapDefaultEndpoints`, and `EnrichSqlServerDbContext` adds retries and the database health check.
 
 ### Validation
 
-Run `dotnet format --verify-no-changes`, `dotnet build`, and `dotnet test` before considering a change done — CI (`.github/workflows/ci.yml`) runs the same on push/PR to `main`.
+Run from the repo root: `dotnet restore`, `dotnet format --no-restore --verify-no-changes --severity info`, `dotnet build --no-restore -c Release`, and `dotnet test --no-build -c Release` (no test projects yet) before considering a change done — CI (`.github/workflows/ci.yml`) runs the same on push/PR to `main`.
 
 ### Open Questions
 
