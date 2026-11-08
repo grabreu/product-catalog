@@ -19,7 +19,7 @@ _The domain is deliberately flat — two validation rules, no state machine — 
 - **Full product lifecycle** — create, update, deactivate and reactivate; deactivation is a reversible soft delete, not a hard delete.
 - **Stock and price as dedicated actions** — stock changes apply a delta, price changes set a new absolute value, each through its own endpoint instead of a generic update.
 - **Concurrency safety** — a write based on a stale read, or a duplicate SKU, responds 409 instead of overwriting.
-- **Paged listing** — filterable by active status.
+- **Paged listing** — filterable by active status; page 1 with 20 items by default.
 - **Get by id**
 
 See [docs/architecture.md](docs/architecture.md) for the domain model and request flow, and [docs/adr/](docs/adr/) for the reasoning behind these decisions.

@@ -60,7 +60,7 @@ public static class ListProductsEndpoint
             .WithTags("Products")
             .WithName("ListProducts")
             .WithSummary("List Products")
-            .WithDescription("Retrieves products oldest first, in pages of up to 100, optionally filtered by active status.")
+            .WithDescription("Retrieves products oldest first, in pages of up to 100 (page 1 with 20 items by default), optionally filtered by active status.")
             .Produces<PagedResult<ProductDto>>(StatusCodes.Status200OK)
             .ProducesValidationProblem();
     }
@@ -70,5 +70,5 @@ public static class ListProductsEndpoint
         return sender.Send(new ListProductsQuery(request.Page, request.PageSize, request.IsActive), cancellationToken).ToOk();
     }
 
-    public record ListProductsRequest([FromQuery] int Page, [FromQuery] int PageSize, [FromQuery] bool? IsActive);
+    public record ListProductsRequest([FromQuery] int Page = 1, [FromQuery] int PageSize = 20, [FromQuery] bool? IsActive = null);
 }
